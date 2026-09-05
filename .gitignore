@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+viewer/dist/
+.dist/
+
+# Reconstruction I/O (large binaries — keep out of git)
+data/raw/
+data/processed/
+output/scenes/**/splat/
+output/scenes/**/mesh/
+output/scenes/**/cloud/
+*.ply
+*.splat
+*.ksplat
+*.glb
+*.gltf
+!viewer/public/**/*.glb
+
+# COLMAP / pipeline artifacts
+*.db
+sparse/
+dense/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python (reconstruction pipeline)
+__pycache__/
+*.pyc
+.venv/
+venv/

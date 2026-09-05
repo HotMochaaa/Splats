@@ -1,0 +1,14 @@
+{
+  "id": "placeholder-room",
+  "name": "Placeholder Room (M1)",
+  "description": "Procedural stand-in scene. Real smartphone reconstructions plug in at M2 by setting assets.mesh or assets.splat.",
+  "coordinateSystem": "y-up",
+  "units": "meters",
+  "bounds": { "min": [-6, 0, -6], "max": [6, 3.2, 6] },
+  "spawn": { "position": [0, 1.6, 4.5], "yaw": 3.14159 },
+  "player": { "eyeHeight": 1.6, "walkSpeed": 3.2, "sprintMultiplier": 2.2 },
+  "assets": {
+    "mesh": null,
+    "splat": null
+  }
+}

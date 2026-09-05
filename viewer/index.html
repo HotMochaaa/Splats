@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NammaSpace — Round 1 Viewer</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { margin: 0; box-sizing: border-box; }
+      html, body { height: 100%; overflow: hidden; background: #0b0d10; font-family: system-ui, sans-serif; }
+      #app { position: fixed; inset: 0; }
+      canvas { display: block; }
+
+      /* Click-to-start overlay */
+      #overlay {
+        position: fixed; inset: 0; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 18px;
+        background: rgba(11, 13, 16, 0.72); backdrop-filter: blur(4px);
+        color: #e7ecf2; text-align: center; cursor: pointer; z-index: 10;
+        transition: opacity 0.25s ease;
+      }
+      #overlay.hidden { opacity: 0; pointer-events: none; }
+      #overlay h1 { font-size: 22px; font-weight: 600; letter-spacing: 0.3px; }
+      #overlay .cta {
+        padding: 12px 22px; border: 1px solid #3a4552; border-radius: 10px;
+        background: #151a20; font-size: 15px;
+      }
+      #overlay .keys { font-size: 13px; color: #9aa7b4; line-height: 1.8; }
+      kbd {
+        background: #1c232b; border: 1px solid #333e49; border-bottom-width: 2px;
+        border-radius: 5px; padding: 1px 7px; font-size: 12px; color: #cdd6df;
+      }
+
+      /* HUD */
+      #hud {
+        position: fixed; left: 12px; bottom: 12px; z-index: 5;
+        font-size: 12px; color: #8b98a6; line-height: 1.7;
+        background: rgba(11,13,16,0.5); padding: 8px 12px; border-radius: 8px;
+        pointer-events: none;
+      }
+      #hud b { color: #cdd6df; font-weight: 600; }
+      #crosshair {
+        position: fixed; left: 50%; top: 50%; width: 6px; height: 6px;
+        margin: -3px 0 0 -3px; border-radius: 50%; background: rgba(255,255,255,0.6);
+        z-index: 4; pointer-events: none; display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="crosshair"></div>
+    <div id="hud">
+      <div><b>NammaSpace</b> — Round 1 free-roam viewer</div>
+      <div id="hud-scene">scene: —</div>
+      <div id="hud-fps">fps: —</div>
+    </div>
+    <div id="overlay">
+      <h1>NammaSpace &mdash; Desktop Free Roaming</h1>
+      <div class="cta">Click to enter &amp; walk around</div>
+      <div class="keys">
+        <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move &nbsp;·&nbsp;
+        <kbd>Mouse</kbd> look &nbsp;·&nbsp; <kbd>Shift</kbd> sprint<br />
+        <kbd>R</kbd> reset camera &nbsp;·&nbsp; <kbd>Esc</kbd> release mouse
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
