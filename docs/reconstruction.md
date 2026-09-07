@@ -13,6 +13,46 @@ coordinate system**). We then branch:
 
 Both share COLMAP's coordinate frame, so the visual and geometric layers align.
 
+## Concrete toolchain (candidates, locked in M4)
+
+**Video → frames**
+```bash
+ffmpeg -i data/raw/room.mp4 -vf "fps=2,mpdecimate" -qscale:v 2 frames/%04d.jpg
+```
+`mpdecimate` drops near-duplicates; 4–10 fps is the useful range. Delete the
+smallest ~5% of JPEGs as a fast blur filter (blurry frames compress smaller and
+spawn floaters). [SplatReady](https://github.com/jacobvanbeets/SplatReady)
+automates the whole video → COLMAP-dataset step.
+
+**Frames → poses:** COLMAP SfM (shared substrate).
+
+**Training the splat**
+- **Nerfstudio `splatfacto`** (`pip install nerfstudio`) — default for CUDA machines.
+- **gsplat** — Nerfstudio's engine; ~10% faster, 4× less memory for custom scripts.
+- **Brush** — WebGPU, **no CUDA** — lets the non-NVIDIA teammate train too.
+- **LichtFeld Studio** — clean/crop/edit splats (remove floaters) before publishing.
+
+**Collision / floor mesh:** SuGaR or 2D-SuGaR / 2DGS → surface-aligned Poisson mesh.
+
+## Web delivery / compression (M5, but decide format early)
+
+Raw `.ply` is huge (~1 GB / 4M gaussians) — compression is mandatory:
+| Format | Ratio | Notes |
+|--------|-------|-------|
+| SOG / SOGS (PlayCanvas, open) | ~20× | 1 GB → ~55 MB; "WebP of splatting" |
+| SPZ (Niantic, open) | 8–12× | 200 MB → ~20 MB; emerging default |
+| KSplat | — | native to mkkellogg viewer, adds LOD (>2M splats) |
+
+Convert with [`playcanvas/splat-transform`](https://github.com/playcanvas/splat-transform).
+
+## Viewer target: **Spark** (sparkjs.dev)
+
+Chosen so the **splat (visual) and the coarse collision mesh live in one Three.js
+scene / coordinate frame** — the placeholder path in `viewer/src/sceneLoader.js`
+(`assets.splat`) wires to Spark at M2. Alternative: mkkellogg/GaussianSplats3D
+(mature, exposes the Three camera so our `FirstPersonControls` work unchanged;
+native KSplat). Benchmark before final lock.
+
 ## Benchmark plan (M4)
 
 Run on the **same** real capture, compare 2 candidates (NeRF dropped up front:
