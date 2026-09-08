@@ -1,0 +1,15 @@
+# NammaSpace reconstruction pipeline — Python deps.
+# The glue (build_scene.py, colmap_io.py) is pure stdlib; nothing here is needed
+# just to build a scene bundle from an existing COLMAP model.
+
+# External tools are NOT pip-installable and must be on PATH:
+#   - ffmpeg   (frame extraction)          https://ffmpeg.org
+#   - COLMAP   (Structure-from-Motion)     https://colmap.github.io
+#
+# Splat trainer — install ONE (see docs/reconstruction.md):
+#   - nerfstudio (CUDA):   pip install nerfstudio
+#   - gsplat (CUDA):       pip install gsplat
+#   - brush (WebGPU, no CUDA): cargo install / prebuilt binary
+#
+# Web compression (Node, run in viewer/ or standalone):
+#   - npx @playcanvas/splat-transform   (PLY -> SOG/SPZ/KSplat)

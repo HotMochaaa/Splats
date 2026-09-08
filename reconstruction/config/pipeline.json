@@ -1,0 +1,33 @@
+{
+  "project": "nammaspace",
+
+  "preprocess": {
+    "fps": 2,
+    "qscale": 2,
+    "dedupe": true,
+    "blur_drop_percentile": 5
+  },
+
+  "colmap": {
+    "matcher": "sequential",
+    "camera_model": "OPENCV",
+    "single_camera": true,
+    "use_gpu": true
+  },
+
+  "train": {
+    "backend": "nerfstudio",
+    "method": "splatfacto",
+    "max_iterations": 30000
+  },
+
+  "scene": {
+    "id": "scene-001",
+    "name": "NammaSpace Scene 001",
+    "up_axis": "-y",
+    "eye_height": 1.6,
+    "walk_speed": 3.2,
+    "sprint_multiplier": 2.2,
+    "bounds_percentile": [2, 98]
+  }
+}
