@@ -32,3 +32,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# Brush/burn autotune cache (written to cwd)
+target/
