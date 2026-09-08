@@ -2,14 +2,33 @@ import * as THREE from 'three';
 import { FirstPersonControls } from './firstPersonControls.js';
 import { loadScene } from './sceneLoader.js';
 
+// --- On-screen error panel (so errors show up in a screenshot, no F12 needed) ---
+const errPanel = document.createElement('div');
+errPanel.style.cssText = 'position:fixed;top:8px;right:8px;max-width:46vw;max-height:60vh;overflow:auto;'
+  + 'z-index:99;font:11px/1.4 monospace;color:#ff9b9b;background:rgba(30,0,0,0.72);'
+  + 'padding:8px 10px;border:1px solid #663;border-radius:6px;white-space:pre-wrap;display:none;';
+document.body.appendChild(errPanel);
+function logErr(tag, msg) {
+  errPanel.style.display = 'block';
+  errPanel.textContent += `[${tag}] ${msg}\n`;
+}
+window.addEventListener('error', (e) => logErr('error', e.message + (e.filename ? ` @ ${e.filename}:${e.lineno}` : '')));
+window.addEventListener('unhandledrejection', (e) => logErr('promise', String(e.reason && e.reason.message || e.reason)));
+const _cerr = console.error.bind(console);
+console.error = (...a) => { logErr('console', a.map(String).join(' ')); _cerr(...a); };
+const _cwarn = console.warn.bind(console);
+console.warn = (...a) => { logErr('warn', a.map(String).join(' ')); _cwarn(...a); };
+
 // Which scene bundle to load. Swap this (or make it a URL param) to view a real
 // reconstruction once M2 produces one.
-const SCENE_URL = '/scenes/placeholder-room/scene.json';
+const SCENE_URL = '/scenes/room/scene.json';
 
 const appEl = document.getElementById('app');
 const overlay = document.getElementById('overlay');
 const crosshair = document.getElementById('crosshair');
 const hudScene = document.getElementById('hud-scene');
+const hudSplat = document.getElementById('hud-splat');
+const hudCam = document.getElementById('hud-cam');
 const hudFps = document.getElementById('hud-fps');
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -27,9 +46,11 @@ let controls = null;
 const clock = new THREE.Clock();
 
 async function init() {
-  const { config, root } = await loadScene(SCENE_URL);
+  const { config, root, debug } = await loadScene(SCENE_URL);
   scene.add(root);
-  scene.fog = new THREE.Fog(0x0b0d10, 12, 40);
+  hudSplat.textContent = debug
+    ? `splat: ${debug.splatError ? 'ERR ' + debug.splatError : 'count ' + debug.splatCount}`
+    : 'splat: (none)';
 
   controls = new FirstPersonControls(camera, renderer.domElement, config);
   scene.add(controls.object);
@@ -57,6 +78,8 @@ function animate() {
   fpsAccum += dt; fpsFrames++; fpsTimer += dt;
   if (fpsTimer >= 0.5) {
     hudFps.textContent = `fps: ${Math.round(fpsFrames / fpsAccum)}`;
+    const p = camera.position;
+    hudCam.textContent = `cam: ${p.x.toFixed(1)}, ${p.y.toFixed(1)}, ${p.z.toFixed(1)}`;
     fpsAccum = 0; fpsFrames = 0; fpsTimer = 0;
   }
 }

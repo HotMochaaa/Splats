@@ -4,10 +4,10 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
 /**
  * Desktop free-roam controller.
  * - PointerLockControls handles mouse-look + pointer lock (Esc releases).
- * - We do WASD movement manually on the XZ plane so it stays version-robust.
- * - M1 floor model: camera Y is pinned to eyeHeight and position is clamped to
- *   scene bounds. Real floor-following / collision arrives at M3 without changing
- *   the viewer's public surface.
+ * - WASD moves on the horizontal plane; Q/E fly down/up when player.flyVertical
+ *   is set (useful while a reconstruction's floor/scale is uncertain).
+ * - Camera stays within scene bounds (with margin). When flyVertical is off, Y is
+ *   pinned to eyeHeight (the capture height); real floor-following/collision is M3.
  */
 export class FirstPersonControls {
   constructor(camera, domElement, sceneConfig) {
@@ -18,10 +18,15 @@ export class FirstPersonControls {
     this.eyeHeight = p.eyeHeight ?? 1.6;
     this.walkSpeed = p.walkSpeed ?? 3.2;
     this.sprintMultiplier = p.sprintMultiplier ?? 2.2;
+    this.flyVertical = p.flyVertical ?? false;
 
     const b = sceneConfig.bounds || { min: [-50, 0, -50], max: [50, 10, 50] };
     this.min = new THREE.Vector3().fromArray(b.min);
     this.max = new THREE.Vector3().fromArray(b.max);
+    // Allow roaming a bit past the point-cloud bounds so wall geometry is reachable.
+    const margin = this.max.clone().sub(this.min).multiplyScalar(0.25);
+    this.min.sub(margin);
+    this.max.add(margin);
 
     this.spawn = sceneConfig.spawn || { position: [0, this.eyeHeight, 0], yaw: 0 };
 
@@ -54,6 +59,8 @@ export class FirstPersonControls {
       case 'KeyA': case 'ArrowLeft': this.keys.left = isDown; break;
       case 'KeyD': case 'ArrowRight': this.keys.right = isDown; break;
       case 'ShiftLeft': case 'ShiftRight': this.keys.sprint = isDown; break;
+      case 'KeyE': case 'Space': this.keys.up = isDown; if (event) event.preventDefault(); break;
+      case 'KeyQ': this.keys.down = isDown; break;
       case 'KeyR':
         if (isDown) { this.reset(); if (event) event.preventDefault(); }
         break;
@@ -62,7 +69,7 @@ export class FirstPersonControls {
 
   reset() {
     const s = this.spawn.position;
-    this.camera.position.set(s[0], this.eyeHeight, s[2]);
+    this.camera.position.set(s[0], s[1] ?? this.eyeHeight, s[2]);
     // PointerLockControls yaw is the camera's Y rotation; pitch resets to level.
     this.camera.rotation.set(0, this.spawn.yaw ?? 0, 0, 'YXZ');
     this._velocity.set(0, 0, 0);
@@ -81,14 +88,19 @@ export class FirstPersonControls {
     if (this.keys.right) move.add(this._right);
     if (this.keys.left) move.sub(this._right);
 
+    const speed = this.walkSpeed * (this.keys.sprint ? this.sprintMultiplier : 1);
     if (move.lengthSq() > 0) {
       move.normalize();
-      const speed = this.walkSpeed * (this.keys.sprint ? this.sprintMultiplier : 1);
       this.camera.position.addScaledVector(move, speed * dt);
     }
 
-    // M1 constraints: pin eye height, clamp inside scene bounds.
-    this.camera.position.y = this.eyeHeight;
+    if (this.flyVertical) {
+      if (this.keys.up) this.camera.position.y += speed * dt;
+      if (this.keys.down) this.camera.position.y -= speed * dt;
+      this.camera.position.y = THREE.MathUtils.clamp(this.camera.position.y, this.min.y, this.max.y);
+    } else {
+      this.camera.position.y = this.eyeHeight;
+    }
     this.camera.position.x = THREE.MathUtils.clamp(this.camera.position.x, this.min.x, this.max.x);
     this.camera.position.z = THREE.MathUtils.clamp(this.camera.position.z, this.min.z, this.max.z);
   }

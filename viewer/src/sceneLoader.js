@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
 
 /**
  * Loads a scene bundle described by scene.json — the ONLY contract between the
@@ -20,20 +21,133 @@ export async function loadScene(sceneUrl) {
   const baseUrl = sceneUrl.slice(0, sceneUrl.lastIndexOf('/') + 1);
   const root = new THREE.Group();
   root.name = `scene:${config.id ?? 'unknown'}`;
+  const debug = { splatCount: null, splatError: null };
 
   const assets = config.assets || {};
   if (assets.mesh) {
     const gltf = await new GLTFLoader().loadAsync(baseUrl + assets.mesh);
     root.add(gltf.scene);
   } else if (assets.splat) {
-    // Reserved for M2: Gaussian-splat renderer wiring goes here.
-    console.warn('[sceneLoader] splat asset present but splat rendering lands in M2; showing placeholder.');
-    root.add(buildPlaceholderRoom(config));
+    // Render the Gaussian-splat .ply as a colored point cloud with plain Three.js.
+    // Reliable (no worker/shader dependency) and enough to explore the room; a
+    // true splat renderer can layer back on later.
+    const q = (config.transform && config.transform.quaternion) || [0, 0, 0, 1];
+    try {
+      const points = await loadPlyAsPoints(baseUrl + assets.splat, config);
+      points.quaternion.set(q[0], q[1], q[2], q[3]);
+      root.add(points);
+      debug.splatCount = points.geometry.getAttribute('position').count;
+      console.log('[sceneLoader] point cloud rendered; points =', debug.splatCount);
+    } catch (e) { debug.splatError = String(e); console.error('[sceneLoader] ply load failed', e); }
   } else {
     root.add(buildPlaceholderRoom(config));
   }
 
-  return { config, root };
+  // Reference gizmos (red bounds box + origin axes) — off by default, shown with
+  // ?debug in the URL for diagnosing camera/orientation issues.
+  const showDebug = typeof location !== 'undefined'
+    && new URLSearchParams(location.search).has('debug');
+  if (config.bounds && showDebug) {
+    const mn = new THREE.Vector3().fromArray(config.bounds.min);
+    const mx = new THREE.Vector3().fromArray(config.bounds.max);
+    root.add(new THREE.Box3Helper(new THREE.Box3(mn, mx), 0xff3355));
+    root.add(new THREE.AxesHelper(mx.clone().sub(mn).length() * 0.2));
+  }
+
+  return { config, root, debug };
+}
+
+/**
+ * Load a 3D Gaussian-splat .ply (INRIA/Brush layout) as a colored THREE.Points
+ * cloud. Reads xyz + f_dc (SH DC -> base color) + opacity, drops low-opacity
+ * floaters and points far outside the scene bounds, and sizes points to the scene.
+ */
+async function loadPlyAsPoints(url, config) {
+  const buf = await fetch(url).then((r) => {
+    if (!r.ok) throw new Error(`ply not found: ${url} (${r.status})`);
+    return r.arrayBuffer();
+  });
+  const bytes = new Uint8Array(buf);
+
+  // Locate end of ASCII header ("end_header\n").
+  const marker = 'end_header\n';
+  let headerEnd = -1;
+  for (let i = 0; i < bytes.length - marker.length; i++) {
+    let ok = true;
+    for (let j = 0; j < marker.length; j++) {
+      if (bytes[i + j] !== marker.charCodeAt(j)) { ok = false; break; }
+    }
+    if (ok) { headerEnd = i + marker.length; break; }
+  }
+  if (headerEnd < 0) throw new Error('ply: end_header not found');
+
+  const header = new TextDecoder().decode(bytes.subarray(0, headerEnd));
+  const props = [];
+  let count = 0;
+  for (const line of header.split(/\r?\n/)) {
+    if (line.startsWith('element vertex')) count = parseInt(line.split(/\s+/)[2], 10);
+    else if (line.startsWith('property float')) props.push(line.split(/\s+/)[2]);
+  }
+  const stride = props.length;
+  const off = (name) => props.indexOf(name);
+  const ix = off('x'), iy = off('y'), iz = off('z');
+  const ir = off('f_dc_0'), ig = off('f_dc_1'), ib = off('f_dc_2'), iop = off('opacity');
+  if (ix < 0 || iy < 0 || iz < 0) throw new Error('ply: missing x/y/z');
+
+  const dv = new DataView(buf, headerEnd);
+  const rec = stride * 4;
+  const SH_C0 = 0.2820948;
+  const f = (base, idx) => dv.getFloat32(base + idx * 4, true);
+
+  // Pass 1: read every splat (xyz, color, alpha). Only drop fully-transparent.
+  const X = new Float32Array(count), Y = new Float32Array(count), Z = new Float32Array(count);
+  const R = new Float32Array(count), G = new Float32Array(count), B = new Float32Array(count);
+  let m = 0;
+  for (let i = 0; i < count; i++) {
+    const base = i * rec;
+    if (iop >= 0 && 1 / (1 + Math.exp(-f(base, iop))) < 0.05) continue;
+    X[m] = f(base, ix); Y[m] = f(base, iy); Z[m] = f(base, iz);
+    if (ir >= 0) {
+      R[m] = Math.min(1, Math.max(0, 0.5 + SH_C0 * f(base, ir)));
+      G[m] = Math.min(1, Math.max(0, 0.5 + SH_C0 * f(base, ig)));
+      B[m] = Math.min(1, Math.max(0, 0.5 + SH_C0 * f(base, ib)));
+    } else { R[m] = G[m] = B[m] = 0.7; }
+    m++;
+  }
+
+  // Robust extent from the points' OWN 1st/99th percentiles (frame-agnostic, so
+  // it works before any display rotation), padded, to reject far floaters.
+  const pctile = (arr, p) => {
+    const s = Float32Array.prototype.slice.call(arr, 0, m).sort();
+    return s[Math.min(m - 1, Math.max(0, Math.floor((m - 1) * p)))];
+  };
+  const lo = [pctile(X, 0.02), pctile(Y, 0.02), pctile(Z, 0.02)];
+  const hi = [pctile(X, 0.98), pctile(Y, 0.98), pctile(Z, 0.98)];
+  const pad = [0, 1, 2].map((k) => (hi[k] - lo[k]) * 0.1 || 1);
+  const bmin = [0, 1, 2].map((k) => lo[k] - pad[k]);
+  const bmax = [0, 1, 2].map((k) => hi[k] + pad[k]);
+
+  // Pass 2: keep points inside the robust box.
+  const pos = [], col = [];
+  for (let i = 0; i < m; i++) {
+    if (X[i] < bmin[0] || X[i] > bmax[0] || Y[i] < bmin[1] || Y[i] > bmax[1]
+      || Z[i] < bmin[2] || Z[i] > bmax[2]) continue;
+    pos.push(X[i], Y[i], Z[i]);
+    col.push(R[i], G[i], B[i]);
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+
+  // Fixed screen-space point size so nearby points don't blow up into big
+  // blocks as you walk through the cloud.
+  const mat = new THREE.PointsMaterial({
+    size: 2.0, vertexColors: true, sizeAttenuation: false,
+  });
+  const points = new THREE.Points(geo, mat);
+  points.name = 'splat-points';
+  return points;
 }
 
 /**
