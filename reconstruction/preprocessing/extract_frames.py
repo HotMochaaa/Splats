@@ -8,27 +8,24 @@ Requires ffmpeg on PATH. Use --run to actually execute (default prints the plan)
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import subprocess
 import sys
 
-
-def load_cfg(path: str | None) -> dict:
-    if path and os.path.exists(path):
-        with open(path, encoding="utf-8") as fh:
-            return json.load(fh).get("preprocess", {})
-    return {}
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline"))
+from tools import load_config, resolve_tool  # noqa: E402
 
 
-def extract(video: str, out_dir: str, cfg: dict, run: bool) -> int:
+def extract(video: str, out_dir: str, full_cfg: dict, run: bool) -> int:
+    cfg = full_cfg.get("preprocess", {})
+    ffmpeg = resolve_tool("ffmpeg", full_cfg, "FFMPEG_BIN")
     fps = cfg.get("fps", 2)
     qscale = cfg.get("qscale", 2)
     dedupe = cfg.get("dedupe", True)
     os.makedirs(out_dir, exist_ok=True)
 
     vf = f"fps={fps}" + (",mpdecimate" if dedupe else "")
-    cmd = ["ffmpeg", "-i", video, "-vf", vf, "-qscale:v", str(qscale),
+    cmd = [ffmpeg, "-i", video, "-vf", vf, "-qscale:v", str(qscale),
            "-vsync", "vfr", os.path.join(out_dir, "frame_%05d.jpg")]
 
     print("[extract_frames]", " ".join(cmd))
@@ -69,7 +66,7 @@ def main(argv=None):
     ap.add_argument("--config", default="reconstruction/config/pipeline.json")
     ap.add_argument("--run", action="store_true", help="execute (default: dry-run)")
     args = ap.parse_args(argv)
-    return extract(args.video, args.out, load_cfg(args.config), args.run)
+    return extract(args.video, args.out, load_config(args.config), args.run)
 
 
 if __name__ == "__main__":

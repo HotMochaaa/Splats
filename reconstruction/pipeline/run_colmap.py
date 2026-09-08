@@ -10,20 +10,17 @@ Requires COLMAP on PATH. Use --run to execute (default prints the plan).
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import subprocess
 import sys
 
-
-def load_cfg(path: str | None) -> dict:
-    if path and os.path.exists(path):
-        with open(path, encoding="utf-8") as fh:
-            return json.load(fh).get("colmap", {})
-    return {}
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from tools import load_config, resolve_tool  # noqa: E402
 
 
-def run_colmap(frames: str, out: str, cfg: dict, run: bool) -> int:
+def run_colmap(frames: str, out: str, full_cfg: dict, run: bool) -> int:
+    cfg = full_cfg.get("colmap", {})
+    colmap = resolve_tool("colmap", full_cfg, "COLMAP_BIN")
     db = os.path.join(out, "database.db")
     sparse = os.path.join(out, "sparse")
     gpu = "1" if cfg.get("use_gpu", True) else "0"
@@ -32,13 +29,13 @@ def run_colmap(frames: str, out: str, cfg: dict, run: bool) -> int:
     matcher = cfg.get("matcher", "sequential") + "_matcher"
 
     steps = [
-        ["colmap", "feature_extractor", "--database_path", db, "--image_path", frames,
+        [colmap, "feature_extractor", "--database_path", db, "--image_path", frames,
          "--ImageReader.camera_model", model, "--ImageReader.single_camera", single,
          "--SiftExtraction.use_gpu", gpu],
-        ["colmap", matcher, "--database_path", db, "--SiftMatching.use_gpu", gpu],
-        ["colmap", "mapper", "--database_path", db, "--image_path", frames,
+        [colmap, matcher, "--database_path", db, "--SiftMatching.use_gpu", gpu],
+        [colmap, "mapper", "--database_path", db, "--image_path", frames,
          "--output_path", sparse],
-        ["colmap", "model_converter", "--input_path", os.path.join(sparse, "0"),
+        [colmap, "model_converter", "--input_path", os.path.join(sparse, "0"),
          "--output_path", os.path.join(sparse, "0"), "--output_type", "TXT"],
     ]
 
@@ -67,7 +64,7 @@ def main(argv=None):
     ap.add_argument("--config", default="reconstruction/config/pipeline.json")
     ap.add_argument("--run", action="store_true", help="execute (default: dry-run)")
     args = ap.parse_args(argv)
-    return run_colmap(args.frames, args.out, load_cfg(args.config), args.run)
+    return run_colmap(args.frames, args.out, load_config(args.config), args.run)
 
 
 if __name__ == "__main__":

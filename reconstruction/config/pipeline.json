@@ -16,10 +16,13 @@
   },
 
   "train": {
-    "backend": "nerfstudio",
+    "backend": "brush",
     "method": "splatfacto",
     "max_iterations": 30000
   },
+
+  "_tools_help": "Override tool paths per-machine via env vars (FFMPEG_BIN, COLMAP_BIN, BRUSH_BIN) or the 'tools' block below. Leave empty to use PATH. Do not commit machine-specific absolute paths.",
+  "tools": {},
 
   "scene": {
     "id": "scene-001",

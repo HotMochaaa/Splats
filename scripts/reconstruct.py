@@ -56,28 +56,28 @@ def main(argv=None):
     ap.add_argument("--run", action="store_true", help="execute (default: dry-run)")
     args = ap.parse_args(argv)
 
+    # Standard COLMAP workspace layout so Brush/nerfstudio ingest it directly:
+    #   data/processed/<id>/{images/, database.db, sparse/0/, train/}
     proc = os.path.join("data", "processed", args.scene_id)
-    frames = os.path.join(proc, "frames")
-    colmap = os.path.join(proc, "colmap")
+    images = os.path.join(proc, "images")
     train = os.path.join(proc, "train")
+    model = os.path.join(proc, "sparse", "0")
     scene_out = os.path.join("output", "scenes", args.scene_id)
     stages = STAGES if args.stage == "all" else [args.stage]
 
     if "frames" in stages:
         if _py("reconstruction/preprocessing/extract_frames.py",
-               ["--video", args.video, "--out", frames, "--config", args.config], args.run):
+               ["--video", args.video, "--out", images, "--config", args.config], args.run):
             return 1
     if "colmap" in stages:
         if _py("reconstruction/pipeline/run_colmap.py",
-               ["--frames", frames, "--out", colmap, "--config", args.config], args.run):
+               ["--frames", images, "--out", proc, "--config", args.config], args.run):
             return 1
     if "train" in stages:
         if _py("reconstruction/pipeline/train_splat.py",
-               ["--frames", frames, "--colmap", colmap, "--out", train,
-                "--config", args.config], args.run):
+               ["--dataset", proc, "--out", train, "--config", args.config], args.run):
             return 1
     if "scene" in stages:
-        model = os.path.join(colmap, "sparse", "0")
         scene_args = ["--model", model, "--out", scene_out, "--config", args.config]
         splat = _find_splat(train) if args.run else None
         if splat:

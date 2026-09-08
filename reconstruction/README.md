@@ -26,20 +26,30 @@ Run a single stage with `--stage {frames,colmap,train,scene}`.
 
 ## Layout produced
 
+Standard COLMAP workspace, so Brush / nerfstudio ingest it directly:
+
 ```
-data/processed/<id>/frames/    extracted JPGs
-data/processed/<id>/colmap/    database.db, sparse/0/{cameras,images,points3D}.txt
-data/processed/<id>/train/     trained splat (export .ply, then compress)
+data/processed/<id>/images/    extracted JPGs
+data/processed/<id>/database.db
+data/processed/<id>/sparse/0/  {cameras,images,points3D}.{bin,txt}
+data/processed/<id>/train/     trained splat (scene.ply, then compress)
 output/scenes/<id>/scene.json  viewer bundle (bounds, spawn, player, assets)
 output/scenes/<id>/splat/      compressed splat for the web
 ```
 
-## Requirements
+## Requirements & tool paths
 
-- **ffmpeg**, **COLMAP** on PATH; a splat trainer (nerfstudio / gsplat / brush).
-- The glue (`build_scene.py`, `colmap_io.py`) is **pure stdlib** — no installs to
-  turn a COLMAP model into a `scene.json`.
-- See `../docs/reconstruction.md` for tool choices and web compression.
+- **ffmpeg**, **COLMAP**, and a splat trainer (**brush** default; nerfstudio/gsplat
+  supported). The glue (`build_scene.py`, `colmap_io.py`) is **pure stdlib**.
+- If the tools aren't on PATH, point the pipeline at them without editing tracked
+  files — env vars take precedence:
+
+  ```bash
+  export FFMPEG_BIN=/path/to/ffmpeg  COLMAP_BIN=/path/to/colmap  BRUSH_BIN=/path/to/brush_app
+  ```
+
+  (or fill the `tools` block in a local, untracked config). See
+  `../docs/reconstruction.md` for tool choices and web compression.
 
 ## Loading a finished scene in the viewer
 
