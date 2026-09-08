@@ -1,0 +1,41 @@
+{
+  "id": "scene-001",
+  "name": "NammaSpace Scene 001",
+  "description": "Reconstructed from smartphone capture (COLMAP + splat).",
+  "coordinateSystem": "y-up",
+  "units": "meters",
+  "generatedFrom": {
+    "images": 132,
+    "points": 4455,
+    "colmapUpAxis": "-y"
+  },
+  "bounds": {
+    "min": [
+      -2.9798,
+      -8.2517,
+      -14.4991
+    ],
+    "max": [
+      6.6298,
+      0.4651,
+      -0.4547
+    ]
+  },
+  "spawn": {
+    "position": [
+      -0.1645,
+      -6.6517,
+      -0.6475
+    ],
+    "yaw": -0.28347
+  },
+  "player": {
+    "eyeHeight": 1.6,
+    "walkSpeed": 3.2,
+    "sprintMultiplier": 2.2
+  },
+  "assets": {
+    "mesh": null,
+    "splat": "splat/scene.ply"
+  }
+}

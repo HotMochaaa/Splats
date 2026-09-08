@@ -52,24 +52,42 @@ def train(dataset: str, out: str, full_cfg: dict, run: bool) -> int:
     cfg = full_cfg.get("train", {})
     backend = cfg.get("backend", "brush")
     iters = cfg.get("max_iterations", 30000)
+    retries = cfg.get("load_retries", 8)
     cmds = _commands(backend, dataset, out, iters, full_cfg)
 
     print(f"[train_splat] backend={backend} iterations={iters} dataset={dataset}")
-    if run:
-        os.makedirs(out, exist_ok=True)
     for cmd in cmds:
         print("[train_splat]", " ".join(cmd))
-        if not run:
-            continue
+    if not run:
+        print("[train_splat] dry-run (pass --run to execute)")
+        return 0
+
+    os.makedirs(out, exist_ok=True)
+
+    # Brush 0.3.0 has a race in its concurrent dataset loader that intermittently
+    # aborts with "IO error ... early eof" before training starts. It fails fast
+    # and returns nonzero, so retry until a load sticks. Success is confirmed by
+    # the exported .ply (Brush exports "scene.ply" here).
+    if backend == "brush":
+        target = os.path.join(out, "scene.ply")
+        for attempt in range(1, retries + 1):
+            if os.path.exists(target):
+                os.remove(target)
+            rc = subprocess.call(cmds[0])
+            if rc == 0 and os.path.exists(target):
+                print(f"[train_splat] trained on attempt {attempt}; exported {target}")
+                return 0
+            print(f"[train_splat] attempt {attempt}/{retries} failed to load "
+                  f"(Brush concurrent-load race); retrying", file=sys.stderr)
+        print(f"[train_splat] Brush failed to load after {retries} attempts", file=sys.stderr)
+        return 1
+
+    for cmd in cmds:
         rc = subprocess.call(cmd)
         if rc != 0:
             print(f"[train_splat] command failed: {cmd[0]}", file=sys.stderr)
             return rc
-
-    if not run:
-        print("[train_splat] dry-run (pass --run to execute)")
-    else:
-        print(f"[train_splat] exported under {out}; compress the .ply for the web")
+    print(f"[train_splat] exported under {out}; compress the .ply for the web")
     return 0
 
 

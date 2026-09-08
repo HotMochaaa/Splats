@@ -31,8 +31,8 @@ def run_colmap(frames: str, out: str, full_cfg: dict, run: bool) -> int:
     steps = [
         [colmap, "feature_extractor", "--database_path", db, "--image_path", frames,
          "--ImageReader.camera_model", model, "--ImageReader.single_camera", single,
-         "--SiftExtraction.use_gpu", gpu],
-        [colmap, matcher, "--database_path", db, "--SiftMatching.use_gpu", gpu],
+         "--FeatureExtraction.use_gpu", gpu],
+        [colmap, matcher, "--database_path", db, "--FeatureMatching.use_gpu", gpu],
         [colmap, "mapper", "--database_path", db, "--image_path", frames,
          "--output_path", sparse],
         [colmap, "model_converter", "--input_path", os.path.join(sparse, "0"),

@@ -26,7 +26,7 @@ def extract(video: str, out_dir: str, full_cfg: dict, run: bool) -> int:
 
     vf = f"fps={fps}" + (",mpdecimate" if dedupe else "")
     cmd = [ffmpeg, "-i", video, "-vf", vf, "-qscale:v", str(qscale),
-           "-vsync", "vfr", os.path.join(out_dir, "frame_%05d.jpg")]
+           "-fps_mode", "vfr", os.path.join(out_dir, "frame_%05d.jpg")]
 
     print("[extract_frames]", " ".join(cmd))
     if not run:
