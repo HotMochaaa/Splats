@@ -20,7 +20,7 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 page.on('console', (m) => console.log('[page]', m.text()));
 page.on('pageerror', (e) => console.log('[pageerror]', e.message));
 
-await page.goto('http://localhost:5173/', { waitUntil: 'load' });
+await page.goto(process.env.SHOT_URL || 'http://localhost:5173/', { waitUntil: 'load' });
 // Reveal the scene (skip the click-to-enter overlay + crosshair).
 await page.evaluate(() => {
   const o = document.getElementById('overlay'); if (o) o.classList.add('hidden');
