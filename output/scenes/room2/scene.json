@@ -45,6 +45,6 @@
   },
   "assets": {
     "mesh": null,
-    "splat": "splat/scene.ply"
+    "splat": "splat/scene.ksplat"
   }
 }

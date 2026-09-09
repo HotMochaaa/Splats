@@ -82,24 +82,33 @@ export class FirstPersonControls {
     this._forward.normalize();
     this._right.crossVectors(this._forward, this.camera.up).normalize();
 
-    const move = new THREE.Vector3();
-    if (this.keys.forward) move.add(this._forward);
-    if (this.keys.back) move.sub(this._forward);
-    if (this.keys.right) move.add(this._right);
-    if (this.keys.left) move.sub(this._right);
-
+    // Desired ("wish") velocity from the keys.
     const speed = this.walkSpeed * (this.keys.sprint ? this.sprintMultiplier : 1);
-    if (move.lengthSq() > 0) {
-      move.normalize();
-      this.camera.position.addScaledVector(move, speed * dt);
+    const wish = new THREE.Vector3();
+    if (this.keys.forward) wish.add(this._forward);
+    if (this.keys.back) wish.sub(this._forward);
+    if (this.keys.right) wish.add(this._right);
+    if (this.keys.left) wish.sub(this._right);
+    if (wish.lengthSq() > 0) wish.normalize().multiplyScalar(speed);
+    let wishY = 0;
+    if (this.flyVertical) {
+      if (this.keys.up) wishY += speed;
+      if (this.keys.down) wishY -= speed;
     }
 
-    if (this.flyVertical) {
-      if (this.keys.up) this.camera.position.y += speed * dt;
-      if (this.keys.down) this.camera.position.y -= speed * dt;
-      this.camera.position.y = THREE.MathUtils.clamp(this.camera.position.y, this.min.y, this.max.y);
-    } else {
+    // Smoothly accelerate/decelerate toward the wish velocity (frame-rate
+    // independent), so movement eases in and coasts to a stop instead of snapping.
+    const t = 1 - Math.exp(-12 * dt);
+    this._velocity.x += (wish.x - this._velocity.x) * t;
+    this._velocity.z += (wish.z - this._velocity.z) * t;
+    this._velocity.y += (wishY - this._velocity.y) * t;
+    this.camera.position.addScaledVector(this._velocity, dt);
+
+    // Constraints: hold eye height when grounded; clamp inside padded bounds.
+    if (!this.flyVertical) {
       this.camera.position.y = this.eyeHeight;
+    } else {
+      this.camera.position.y = THREE.MathUtils.clamp(this.camera.position.y, this.min.y, this.max.y);
     }
     this.camera.position.x = THREE.MathUtils.clamp(this.camera.position.x, this.min.x, this.max.x);
     this.camera.position.z = THREE.MathUtils.clamp(this.camera.position.z, this.min.z, this.max.z);

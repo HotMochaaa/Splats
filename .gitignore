@@ -35,3 +35,6 @@ venv/
 
 # Brush/burn autotune cache (written to cwd)
 target/
+
+# Web-ready compressed splats ARE tracked (small, deploy artifacts); raw .ply/.splat stay ignored
+!viewer/public/scenes/**/*.ksplat
