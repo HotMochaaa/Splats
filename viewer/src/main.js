@@ -21,7 +21,7 @@ console.warn = (...a) => { logErr('warn', a.map(String).join(' ')); _cwarn(...a)
 
 // Which scene bundle to load. Swap this (or make it a URL param) to view a real
 // reconstruction once M2 produces one.
-const SCENE_URL = '/scenes/room/scene.json';
+const SCENE_URL = '/scenes/room2/scene.json';
 
 const appEl = document.getElementById('app');
 const overlay = document.getElementById('overlay');

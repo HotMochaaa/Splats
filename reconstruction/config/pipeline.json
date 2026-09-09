@@ -1,13 +1,14 @@
 {
   "project": "nammaspace",
   "preprocess": {
-    "fps": 4,
+    "fps": 2,
     "qscale": 2,
     "dedupe": true,
-    "blur_drop_percentile": 3
+    "blur_drop_percentile": 3,
+    "max_width": 1920
   },
   "colmap": {
-    "matcher": "exhaustive",
+    "matcher": "sequential",
     "camera_model": "OPENCV",
     "single_camera": true,
     "use_gpu": true

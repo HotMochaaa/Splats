@@ -22,9 +22,15 @@ def extract(video: str, out_dir: str, full_cfg: dict, run: bool) -> int:
     fps = cfg.get("fps", 2)
     qscale = cfg.get("qscale", 2)
     dedupe = cfg.get("dedupe", True)
+    max_width = cfg.get("max_width")
     os.makedirs(out_dir, exist_ok=True)
 
-    vf = f"fps={fps}" + (",mpdecimate" if dedupe else "")
+    # fps -> optional downscale (only if larger than max_width) -> dedupe.
+    vf = f"fps={fps}"
+    if max_width:
+        vf += f",scale='min(iw,{max_width})':-2"
+    if dedupe:
+        vf += ",mpdecimate"
     cmd = [ffmpeg, "-i", video, "-vf", vf, "-qscale:v", str(qscale),
            "-fps_mode", "vfr", os.path.join(out_dir, "frame_%05d.jpg")]
 
