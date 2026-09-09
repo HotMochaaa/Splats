@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Splat renderer test</title>
+    <style>
+      html,body{margin:0;height:100%;background:#111;overflow:hidden}
+      #diag{position:fixed;top:0;left:0;z-index:9;max-width:60vw;max-height:100vh;overflow:auto;
+        color:#9fe;background:rgba(0,0,0,.7);font:12px/1.5 monospace;padding:10px;white-space:pre-wrap}
+    </style>
+  </head>
+  <body>
+    <div id="diag"></div>
+    <script type="module">
+      const diag = document.getElementById('diag');
+      const say = (m) => { diag.textContent += m + '\n'; };
+      window.addEventListener('error', (e) => say('window.error: ' + e.message));
+      window.addEventListener('unhandledrejection', (e) => say('promise: ' + (e.reason && e.reason.message || e.reason)));
+      const _e = console.error.bind(console); console.error = (...a)=>{ say('console.error: ' + a.map(String).join(' ')); _e(...a); };
+      const _w = console.warn.bind(console); console.warn = (...a)=>{ say('warn: ' + a.map(String).join(' ')); _w(...a); };
+
+      // --- GPU / WebGL2 capability report ---
+      try {
+        const c = document.createElement('canvas');
+        const gl = c.getContext('webgl2');
+        say('WebGL2: ' + (gl ? 'yes' : 'NO'));
+        if (gl) {
+          const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+          say('GPU: ' + (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'unknown'));
+          say('EXT_color_buffer_float: ' + !!gl.getExtension('EXT_color_buffer_float'));
+          say('OES_texture_float_linear: ' + !!gl.getExtension('OES_texture_float_linear'));
+        }
+        say('SharedArrayBuffer: ' + (typeof SharedArrayBuffer !== 'undefined'));
+        say('crossOriginIsolated: ' + self.crossOriginIsolated);
+      } catch (e) { say('caps error: ' + e.message); }
+
+      import('@mkkellogg/gaussian-splats-3d').then((GaussianSplats3D) => {
+        say('mkkellogg loaded, creating viewer…');
+        const viewer = new GaussianSplats3D.Viewer({
+          cameraUp: [0, 1, 0],
+          initialCameraPosition: [-1, -4, 6],
+          initialCameraLookAt: [0, 0, 0],
+          sharedMemoryForWorkers: typeof SharedArrayBuffer !== 'undefined',
+          gpuAcceleratedSort: false,
+        });
+        viewer.addSplatScene('/scenes/sample/train.splat', {
+          format: GaussianSplats3D.SceneFormat.Splat,
+          showLoadingUI: false,
+          splatAlphaRemovalThreshold: 5,
+        }).then(() => {
+          try {
+            const mesh = viewer.getSplatMesh ? viewer.getSplatMesh() : viewer.splatMesh;
+            say('scene added. splatCount = ' + (mesh && mesh.getSplatCount ? mesh.getSplatCount() : '?'));
+          } catch (e) { say('count err: ' + e.message); }
+          viewer.start();
+          say('viewer.start() called — drag to orbit');
+        }).catch((e) => say('LOAD ERROR: ' + (e && e.message ? e.message : e)));
+      }).catch((e) => say('import error: ' + e.message));
+    </script>
+  </body>
+</html>
