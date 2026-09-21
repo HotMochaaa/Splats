@@ -19,9 +19,9 @@ console.error = (...a) => { logErr('console', a.map(String).join(' ')); _cerr(..
 const _cwarn = console.warn.bind(console);
 console.warn = (...a) => { logErr('warn', a.map(String).join(' ')); _cwarn(...a); };
 
-// Which scene bundle to load. Supports URL param ?scene=custom-video-v3B, custom-video-v3C, custom-video-v2, custom-video
+// Which scene bundle to load. Supports URL param ?scene=custom-video-v3B-fix1, custom-video-v3B, custom-video-v3C, etc.
 const urlParams = new URLSearchParams(window.location.search);
-const activeScene = urlParams.get('scene') || 'custom-video-v3B';
+const activeScene = urlParams.get('scene') || 'custom-video-v3B-fix1';
 const SCENE_URL = `/scenes/${activeScene}/scene.json`;
 
 const appEl = document.getElementById('app');
@@ -39,7 +39,15 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 appEl.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0b0d10);
+
+// 3 Background modes: Soft Room Tone (#1c2026), Pitch Dark (#0b0d10), Debug Magenta (#ff00ff)
+let bgModeIndex = 0;
+const bgColors = [
+  { name: 'Soft Neutral Room Tone', color: 0x1c2026 },
+  { name: 'Pitch Dark', color: 0x0b0d10 },
+  { name: 'Debug Magenta', color: 0xff00ff }
+];
+scene.background = new THREE.Color(bgColors[0].color);
 
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.05, 1000);
 
@@ -48,6 +56,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 let fpControls = null;
 let orbitControls = null;
 let activeMode = 'orbit'; // default to orbit for easy inspection
+let angleLimitActive = false;
 const clock = new THREE.Clock();
 
 async function init() {
@@ -69,17 +78,20 @@ async function init() {
   orbitControls.enableDamping = true;
   orbitControls.dampingFactor = 0.05;
   orbitControls.minDistance = 0.2;
-  orbitControls.maxDistance = 5.5;
+  orbitControls.maxDistance = 5.0;
 
   fpControls = new FirstPersonControls(camera, renderer.domElement, config);
   scene.add(fpControls.object);
 
+  const btnV3bFix = document.getElementById('btn-v3b-fix');
   const btnV3b = document.getElementById('btn-v3b');
   const btnV3c = document.getElementById('btn-v3c');
   const btnV2 = document.getElementById('btn-v2');
   const btnV1 = document.getElementById('btn-v1');
   const btnOrbit = document.getElementById('btn-orbit');
   const btnWalk = document.getElementById('btn-walk');
+  const btnAngleLimit = document.getElementById('btn-angle-limit');
+  const btnBgToggle = document.getElementById('btn-bg-toggle');
   const btnReset = document.getElementById('btn-reset');
   const btnBed = document.getElementById('btn-bed');
   const btnDesk = document.getElementById('btn-desk');
@@ -103,6 +115,31 @@ async function init() {
     }
   }
 
+  function setAngleLimit(enabled) {
+    angleLimitActive = enabled;
+    if (btnAngleLimit) {
+      btnAngleLimit.textContent = `🔭 Angle Limit: ${enabled ? 'ON' : 'OFF'}`;
+      btnAngleLimit.classList.toggle('active', enabled);
+    }
+    if (orbitControls) {
+      orbitControls.maxPolarAngle = enabled ? Math.PI * 0.52 : Math.PI;
+    }
+    if (fpControls) {
+      fpControls.limitLookUp = enabled;
+    }
+  }
+
+  btnAngleLimit?.addEventListener('click', () => {
+    setAngleLimit(!angleLimitActive);
+  });
+
+  function cycleBg() {
+    bgModeIndex = (bgModeIndex + 1) % bgColors.length;
+    scene.background = new THREE.Color(bgColors[bgModeIndex].color);
+    console.log('[BG Mode]', bgColors[bgModeIndex].name);
+  }
+  btnBgToggle?.addEventListener('click', cycleBg);
+
   function resetToCenter() {
     setMode('orbit');
     if (activeScene.startsWith('custom-video-v3')) {
@@ -124,12 +161,14 @@ async function init() {
   hudScene.textContent = `scene: ${config.name ?? config.id ?? 'scene'}`;
 
   // Highlight active version button
-  [btnV3b, btnV3c, btnV2, btnV1].forEach(b => b?.classList.remove('active'));
-  if (activeScene === 'custom-video-v3B') btnV3b?.classList.add('active');
+  [btnV3bFix, btnV3b, btnV3c, btnV2, btnV1].forEach(b => b?.classList.remove('active'));
+  if (activeScene === 'custom-video-v3B-fix1') btnV3bFix?.classList.add('active');
+  else if (activeScene === 'custom-video-v3B') btnV3b?.classList.add('active');
   else if (activeScene === 'custom-video-v3C') btnV3c?.classList.add('active');
   else if (activeScene === 'custom-video-v2') btnV2?.classList.add('active');
   else if (activeScene === 'custom-video') btnV1?.classList.add('active');
 
+  btnV3bFix?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B-fix1'; });
   btnV3b?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B'; });
   btnV3c?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3C'; });
   btnV2?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v2'; });
@@ -170,13 +209,15 @@ async function init() {
     orbitControls.update();
   });
 
-  // Key handlers for Mode Switch (Tab) and Reset (R)
+  // Key handlers for Mode Switch (Tab), Reset (R), and Debug Background (B)
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Tab') {
       e.preventDefault();
       setMode(activeMode === 'orbit' ? 'fp' : 'orbit');
     } else if (e.code === 'KeyR') {
       btnReset?.click();
+    } else if (e.code === 'KeyB') {
+      cycleBg();
     }
   });
 

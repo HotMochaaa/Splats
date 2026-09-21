@@ -11,6 +11,11 @@ const crossOriginIsolation = {
 };
 
 export default defineConfig({
-  server: { headers: crossOriginIsolation },
+  server: {
+    headers: crossOriginIsolation,
+    watch: {
+      ignored: ['**/*.ksplat', '**/*.ply', '**/*.db', '**/sparse/**']
+    }
+  },
   preview: { headers: crossOriginIsolation },
 });

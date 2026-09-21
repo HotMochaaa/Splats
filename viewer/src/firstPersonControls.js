@@ -109,6 +109,12 @@ export class FirstPersonControls {
     }
     this.camera.position.x = THREE.MathUtils.clamp(this.camera.position.x, this.min.x, this.max.x);
     this.camera.position.z = THREE.MathUtils.clamp(this.camera.position.z, this.min.z, this.max.z);
+
+    // Optional soft look-up angle limit (default off)
+    if (this.limitLookUp) {
+      // Clamp pitch between -70 deg and +45 deg to prevent looking into uncaptured ceiling voids
+      this.camera.rotation.x = THREE.MathUtils.clamp(this.camera.rotation.x, -Math.PI / 4, Math.PI / 2.5);
+    }
   }
 
   dispose() {
