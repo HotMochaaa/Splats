@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import glob
 import os
+import shutil
 import subprocess
 import sys
 
@@ -50,7 +51,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--video", required=True)
-    ap.add_argument("--scene-id", required=True)
+    ap.add_argument("--scene-id", default="custom-video", help="Scene identifier (default: custom-video)")
     ap.add_argument("--config", default="reconstruction/config/pipeline.json")
     ap.add_argument("--stage", choices=STAGES + ["all"], default="all")
     ap.add_argument("--run", action="store_true", help="execute (default: dry-run)")
@@ -79,11 +80,11 @@ def main(argv=None):
             return 1
     if "scene" in stages:
         scene_args = ["--model", model, "--out", scene_out, "--config", args.config]
-        splat = _find_splat(train) if args.run else None
+        splat = _find_splat(train)
         if splat:
             scene_args += ["--splat", splat]
             print(f"[reconstruct] including splat: {splat}")
-        elif args.run:
+        else:
             print("[reconstruct] no splat found in train dir; scene.json will have "
                   "assets.splat=null (fill in once training exports one)")
         # build_scene has no external deps and no --run flag; it executes whenever
@@ -93,6 +94,17 @@ def main(argv=None):
             if _py("reconstruction/pipeline/build_scene.py", scene_args, args.run,
                    add_run=False):
                 return 1
+            # Deploy to viewer public scenes automatically
+            viewer_scene_dir = os.path.join(ROOT, "viewer", "public", "scenes", args.scene_id)
+            os.makedirs(viewer_scene_dir, exist_ok=True)
+            for item in os.listdir(scene_out):
+                s = os.path.join(scene_out, item)
+                d = os.path.join(viewer_scene_dir, item)
+                if os.path.isdir(s):
+                    shutil.copytree(s, d, dirs_exist_ok=True)
+                else:
+                    shutil.copy2(s, d)
+            print(f"[reconstruct] Deployed scene bundle directly to {viewer_scene_dir}")
         else:
             print("\n=== reconstruction/pipeline/build_scene.py ===")
             print("[reconstruct] would run: build_scene.py " + " ".join(scene_args))

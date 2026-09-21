@@ -21,12 +21,9 @@ export class FirstPersonControls {
     this.flyVertical = p.flyVertical ?? false;
 
     const b = sceneConfig.bounds || { min: [-50, 0, -50], max: [50, 10, 50] };
-    this.min = new THREE.Vector3().fromArray(b.min);
-    this.max = new THREE.Vector3().fromArray(b.max);
-    // Allow roaming a bit past the point-cloud bounds so wall geometry is reachable.
-    const margin = this.max.clone().sub(this.min).multiplyScalar(0.25);
-    this.min.sub(margin);
-    this.max.add(margin);
+    // Clamp strictly inside room bounds with 0.3m safety padding from walls
+    this.min = new THREE.Vector3().fromArray(b.min).addScalar(0.3);
+    this.max = new THREE.Vector3().fromArray(b.max).subScalar(0.3);
 
     this.spawn = sceneConfig.spawn || { position: [0, this.eyeHeight, 0], yaw: 0 };
 

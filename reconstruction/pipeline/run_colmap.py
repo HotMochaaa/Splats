@@ -28,11 +28,15 @@ def run_colmap(frames: str, out: str, full_cfg: dict, run: bool) -> int:
     single = "1" if cfg.get("single_camera", True) else "0"
     matcher = cfg.get("matcher", "sequential") + "_matcher"
 
+    matcher_cmd = [colmap, matcher, "--database_path", db, "--FeatureMatching.use_gpu", gpu]
+    if "sequential" in matcher:
+        matcher_cmd.extend(["--SequentialMatching.overlap", "20", "--SequentialMatching.quadratic_overlap", "1"])
+
     steps = [
         [colmap, "feature_extractor", "--database_path", db, "--image_path", frames,
          "--ImageReader.camera_model", model, "--ImageReader.single_camera", single,
          "--FeatureExtraction.use_gpu", gpu],
-        [colmap, matcher, "--database_path", db, "--FeatureMatching.use_gpu", gpu],
+        matcher_cmd,
         [colmap, "mapper", "--database_path", db, "--image_path", frames,
          "--output_path", sparse],
         [colmap, "model_converter", "--input_path", os.path.join(sparse, "0"),
@@ -41,13 +45,40 @@ def run_colmap(frames: str, out: str, full_cfg: dict, run: bool) -> int:
 
     if run:
         os.makedirs(sparse, exist_ok=True)
-    for cmd in steps:
-        print("[run_colmap]", " ".join(cmd))
-        if not run:
-            continue
-        rc = subprocess.call(cmd)
+        for i in range(3):
+            cmd = steps[i]
+            print("[run_colmap]", " ".join(cmd))
+            rc = subprocess.call(cmd)
+            if rc != 0:
+                print(f"[run_colmap] step failed: {cmd[1]}", file=sys.stderr)
+                return rc
+        
+        # Auto-detect and promote the primary cluster with largest images.bin to sparse/0
+        import shutil
+        clusters = [d for d in os.listdir(sparse) if os.path.isdir(os.path.join(sparse, d)) and d.isdigit()]
+        if clusters:
+            def _cl_size(c):
+                p = os.path.join(sparse, c, "images.bin")
+                return os.path.getsize(p) if os.path.exists(p) else 0
+            best = max(clusters, key=_cl_size)
+            if best != "0" and _cl_size(best) > _cl_size("0"):
+                print(f"[run_colmap] Promoting primary cluster '{best}' to 'sparse/0'")
+                dst_0 = os.path.join(sparse, "0")
+                src_best = os.path.join(sparse, best)
+                tmp_dir = os.path.join(sparse, "tmp_small_0")
+                if os.path.exists(dst_0):
+                    shutil.move(dst_0, tmp_dir)
+                shutil.copytree(src_best, dst_0, dirs_exist_ok=True)
+                if os.path.exists(tmp_dir):
+                    shutil.rmtree(tmp_dir, ignore_errors=True)
+
+        # Convert primary cluster to TXT
+        conv_cmd = [colmap, "model_converter", "--input_path", os.path.join(sparse, "0"),
+                    "--output_path", os.path.join(sparse, "0"), "--output_type", "TXT"]
+        print("[run_colmap]", " ".join(conv_cmd))
+        rc = subprocess.call(conv_cmd)
         if rc != 0:
-            print(f"[run_colmap] step failed: {cmd[1]}", file=sys.stderr)
+            print(f"[run_colmap] step failed: model_converter", file=sys.stderr)
             return rc
 
     if not run:

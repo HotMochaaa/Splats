@@ -8,22 +8,17 @@ globalThis.document = globalThis.document || { createElement: () => ({}), create
 import * as GS from '@mkkellogg/gaussian-splats-3d';
 import fs from 'fs';
 
-const [inPath, outPath, compArg, shArg] = process.argv.slice(2);
+const [inPath, outPath, compArg, shArg, minAlphaArg] = process.argv.slice(2);
 if (!inPath || !outPath) {
-  console.error('usage: node convert-ksplat.mjs <in.ply> <out.ksplat> [comp 0|1|2] [shDeg]');
+  console.error('usage: node convert-ksplat.mjs <in.ply> <out.ksplat> [comp 0|1|2] [shDeg] [minAlpha]');
   process.exit(1);
 }
 const compressionLevel = compArg !== undefined ? parseInt(compArg, 10) : 1;
-const shDegree = shArg !== undefined ? parseInt(shArg, 10) : 0;
-
-const buf = fs.readFileSync(inPath);
-const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
-
-console.log(`[convert] ${inPath} (${(buf.length / 1e6).toFixed(1)} MB) -> ksplat`
-  + ` comp=${compressionLevel} sh=${shDegree}`);
-
-const minimumAlpha = 5;
+const shDegree = shArg !== undefined ? parseInt(shArg, 10) : 1;
+const minimumAlpha = minAlphaArg !== undefined ? parseInt(minAlphaArg, 10) : 15;
 const optimize = true;
+const fileBuf = fs.readFileSync(inPath);
+const ab = fileBuf.buffer.slice(fileBuf.byteOffset, fileBuf.byteOffset + fileBuf.byteLength);
 const splatBuffer = await GS.PlyLoader.loadFromFileData(
   ab, minimumAlpha, compressionLevel, optimize, shDegree,
 );

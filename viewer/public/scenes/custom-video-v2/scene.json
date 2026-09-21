@@ -1,0 +1,54 @@
+{
+  "id": "custom-video-v2",
+  "name": "NammaSpace Scene v2 (1080p, SH=1, 30k steps)",
+  "description": "Reconstructed from smartphone capture v2 (1080p frames, COLMAP + 3DGS 30k steps).",
+  "renderOptions": {
+    "splatAlphaRemovalThreshold": 15,
+    "gpuAcceleratedSort": false
+  },
+  "coordinateSystem": "y-up",
+  "units": "arbitrary (COLMAP up-to-scale)",
+  "generatedFrom": {
+    "images": 592,
+    "points": 67985,
+    "upEstimation": "auto"
+  },
+  "transform": {
+    "quaternion": [
+      0.968562,
+      0.0,
+      0.241425,
+      -0.060019
+    ]
+  },
+  "bounds": {
+    "min": [
+      -2.0,
+      -5.5,
+      -4.5
+    ],
+    "max": [
+      5.5,
+      2.0,
+      3.5
+    ]
+  },
+  "spawn": {
+    "position": [
+      0.91,
+      0.06,
+      -0.42
+    ],
+    "yaw": 2.2546
+  },
+  "player": {
+    "eyeHeight": 0.06,
+    "walkSpeed": 2.0,
+    "sprintMultiplier": 2.2,
+    "flyVertical": true
+  },
+  "assets": {
+    "mesh": null,
+    "splat": "splat/scene.ksplat"
+  }
+}

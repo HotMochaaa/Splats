@@ -31,7 +31,7 @@ def extract(video: str, out_dir: str, full_cfg: dict, run: bool) -> int:
         vf += f",scale='min(iw,{max_width})':-2"
     if dedupe:
         vf += ",mpdecimate"
-    cmd = [ffmpeg, "-i", video, "-vf", vf, "-qscale:v", str(qscale),
+    cmd = [ffmpeg, "-y", "-i", video, "-vf", vf, "-qscale:v", str(qscale),
            "-fps_mode", "vfr", os.path.join(out_dir, "frame_%05d.jpg")]
 
     print("[extract_frames]", " ".join(cmd))
