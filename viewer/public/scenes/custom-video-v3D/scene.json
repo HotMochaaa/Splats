@@ -1,0 +1,50 @@
+{
+  "id": "custom-video-v3D",
+  "name": "NammaSpace Scene v3D (SuperClean PLY)",
+  "description": "Dedicated High-Clarity Model with SuperClean scale regularization penalty.",
+  "coordinateSystem": "y-up",
+  "units": "arbitrary (COLMAP up-to-scale)",
+  "generatedFrom": {
+    "images": 370,
+    "points": 89839,
+    "upEstimation": "auto"
+  },
+  "transform": {
+    "quaternion": [
+      0.931588,
+      0.0,
+      -0.295638,
+      0.211523
+    ]
+  },
+  "bounds": {
+    "min": [
+      -2.9886,
+      -3.1241,
+      -4.1665
+    ],
+    "max": [
+      3.4955,
+      1.705,
+      4.2016
+    ]
+  },
+  "spawn": {
+    "position": [
+      0.2469,
+      -0.0321,
+      0.871
+    ],
+    "yaw": -0.00766
+  },
+  "player": {
+    "eyeHeight": -0.0321,
+    "walkSpeed": 1.4545,
+    "sprintMultiplier": 2.2,
+    "flyVertical": true
+  },
+  "assets": {
+    "mesh": null,
+    "splat": "splat/scene_superclean.ply"
+  }
+}

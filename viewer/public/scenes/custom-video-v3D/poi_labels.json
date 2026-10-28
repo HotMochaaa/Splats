@@ -1,0 +1,414 @@
+{
+  "version": "5.0",
+  "total_objects": 24,
+  "objects": [
+    {
+      "id": "poi_almirah_1",
+      "label": "Almirah 1 (Left Wardrobe)",
+      "category": "Almirah / Wardrobe",
+      "views_count": 130,
+      "position": [
+        3.531,
+        -1.952,
+        1.728
+      ],
+      "size": [
+        0.85,
+        1.85,
+        0.65
+      ],
+      "description": "Left tall metal almirah wardrobe beside the grey suitcase."
+    },
+    {
+      "id": "poi_almirah_2",
+      "label": "Almirah 2 (Right Wardrobe)",
+      "category": "Almirah / Wardrobe",
+      "views_count": 145,
+      "position": [
+        0.8,
+        -0.835,
+        4.438
+      ],
+      "size": [
+        0.85,
+        1.85,
+        0.65
+      ],
+      "description": "Right tall metal almirah wardrobe."
+    },
+    {
+      "id": "poi_suitcase_grey",
+      "label": "Suitcase (Grey Suitcase on Bed)",
+      "category": "Luggage / Suitcases",
+      "views_count": 58,
+      "position": [
+        3.2,
+        -1.75,
+        1.15
+      ],
+      "size": [
+        0.65,
+        0.45,
+        0.35
+      ],
+      "description": "Grey hard-shell suitcase beside Almirah 1 on the bed corner."
+    },
+    {
+      "id": "poi_suitcase_teal_floor",
+      "label": "Suitcase 1 (Teal Floor Trolley)",
+      "category": "Luggage / Suitcases",
+      "views_count": 61,
+      "position": [
+        -0.209,
+        -1.985,
+        -1.242
+      ],
+      "size": [
+        0.42,
+        0.58,
+        0.28
+      ],
+      "description": "Teal luggage trolley on the floor walkway."
+    },
+    {
+      "id": "poi_suitcase_teal_almirah",
+      "label": "Suitcase 2 (Top of Almirah 2)",
+      "category": "Luggage / Suitcases",
+      "views_count": 48,
+      "position": [
+        0.659,
+        0.604,
+        4.398
+      ],
+      "size": [
+        0.55,
+        0.35,
+        0.7
+      ],
+      "description": "Teal luggage suitcase resting on top of Almirah 2."
+    },
+    {
+      "id": "poi_suitcase_black_almirah",
+      "label": "Suitcase 3 (Top of Almirah 1)",
+      "category": "Luggage / Suitcases",
+      "views_count": 42,
+      "position": [
+        3.2,
+        0.813,
+        2.659
+      ],
+      "size": [
+        0.6,
+        0.35,
+        0.75
+      ],
+      "description": "Black travel suitcase resting on top of Almirah 1."
+    },
+    {
+      "id": "poi_shoes_pair1",
+      "label": "Shoes 1 (White Sneakers)",
+      "category": "Shoes & Footwear",
+      "views_count": 80,
+      "position": [
+        -0.35,
+        -2.65,
+        0.52
+      ],
+      "size": [
+        0.3,
+        0.18,
+        0.35
+      ],
+      "description": "Pair of white sneakers on the floor near the bed."
+    },
+    {
+      "id": "poi_shoes_pair2",
+      "label": "Shoes 2 (Black Slippers / Sandals)",
+      "category": "Shoes & Footwear",
+      "views_count": 65,
+      "position": [
+        0.42,
+        -2.85,
+        0.35
+      ],
+      "size": [
+        0.28,
+        0.15,
+        0.32
+      ],
+      "description": "Black slippers resting on the floor between the beds."
+    },
+    {
+      "id": "poi_shoes_pair3",
+      "label": "Shoes 3 (Sneakers by Bed)",
+      "category": "Shoes & Footwear",
+      "views_count": 50,
+      "position": [
+        -0.48,
+        -2.45,
+        -0.85
+      ],
+      "size": [
+        0.3,
+        0.18,
+        0.32
+      ],
+      "description": "Pair of casual shoes on the floor near the walkway."
+    },
+    {
+      "id": "poi_bottle_sprite",
+      "label": "Bottle 1 (Green Sprite Bottle)",
+      "category": "Bottles & Drinks",
+      "views_count": 55,
+      "position": [
+        -2.35,
+        -0.85,
+        -0.15
+      ],
+      "size": [
+        0.12,
+        0.3,
+        0.12
+      ],
+      "description": "Green beverage bottle on the study shelf."
+    },
+    {
+      "id": "poi_bottle_shaker",
+      "label": "Bottle 2 (Protein Shaker Cup)",
+      "category": "Bottles & Drinks",
+      "views_count": 68,
+      "position": [
+        0.72,
+        -0.75,
+        -2.7
+      ],
+      "size": [
+        0.14,
+        0.28,
+        0.14
+      ],
+      "description": "Shaker bottle with yellow cap on storage cabinet."
+    },
+    {
+      "id": "poi_bottle_water",
+      "label": "Bottle 3 (Clear Water Bottle)",
+      "category": "Bottles & Drinks",
+      "views_count": 40,
+      "position": [
+        -1.85,
+        -1.1,
+        -0.45
+      ],
+      "size": [
+        0.12,
+        0.26,
+        0.12
+      ],
+      "description": "Water bottle on the study desk."
+    },
+    {
+      "id": "poi_dustbin",
+      "label": "Dustbin (Green Bucket)",
+      "category": "Utilities",
+      "views_count": 45,
+      "position": [
+        1.95,
+        -2.25,
+        2.85
+      ],
+      "size": [
+        0.3,
+        0.4,
+        0.3
+      ],
+      "description": "Green plastic dustbin bucket in the corner."
+    },
+    {
+      "id": "poi_laptop_desk",
+      "label": "Laptop 1 (Study Desk)",
+      "category": "Electronics",
+      "views_count": 34,
+      "position": [
+        -2.583,
+        -0.415,
+        0.278
+      ],
+      "size": [
+        0.45,
+        0.25,
+        0.35
+      ],
+      "description": "Workstation laptop on the study desk."
+    },
+    {
+      "id": "poi_laptop_bed",
+      "label": "Laptop 2 (Bed)",
+      "category": "Electronics",
+      "views_count": 71,
+      "position": [
+        -1.797,
+        -2.203,
+        0.517
+      ],
+      "size": [
+        0.45,
+        0.25,
+        0.35
+      ],
+      "description": "White laptop open on the maroon mattress bed."
+    },
+    {
+      "id": "poi_desk",
+      "label": "Study Desk (Workstation)",
+      "category": "Furniture",
+      "views_count": 142,
+      "position": [
+        -1.695,
+        -1.232,
+        -0.201
+      ],
+      "size": [
+        1.1,
+        0.75,
+        0.65
+      ],
+      "description": "Study desk with books, bottles, and laptop."
+    },
+    {
+      "id": "poi_chair",
+      "label": "Office Chair",
+      "category": "Furniture",
+      "views_count": 159,
+      "position": [
+        -1.565,
+        -1.813,
+        -2.091
+      ],
+      "size": [
+        0.6,
+        0.9,
+        0.6
+      ],
+      "description": "Mesh office desk chair at the study table."
+    },
+    {
+      "id": "poi_bed_left",
+      "label": "Bed 1 (Maroon Mattress)",
+      "category": "Bedding",
+      "views_count": 110,
+      "position": [
+        -1.65,
+        -2.55,
+        0.85
+      ],
+      "size": [
+        1.4,
+        0.45,
+        1.8
+      ],
+      "description": "Left single bed with maroon mattress."
+    },
+    {
+      "id": "poi_bed_right",
+      "label": "Bed 2 (Floral Blanket)",
+      "category": "Bedding",
+      "views_count": 125,
+      "position": [
+        0.95,
+        -2.6,
+        0.75
+      ],
+      "size": [
+        1.4,
+        0.45,
+        1.8
+      ],
+      "description": "Right single bed with white & floral sheets."
+    },
+    {
+      "id": "poi_pillow_1",
+      "label": "Pillow 1 (White Pillow)",
+      "category": "Bedding",
+      "views_count": 44,
+      "position": [
+        -1.836,
+        -2.33,
+        2.18
+      ],
+      "size": [
+        0.5,
+        0.25,
+        0.4
+      ],
+      "description": "White pillow on Bed 1."
+    },
+    {
+      "id": "poi_pillow_2",
+      "label": "Pillow 2 (Bed 2 Pillow)",
+      "category": "Bedding",
+      "views_count": 24,
+      "position": [
+        3.619,
+        -2.045,
+        0.881
+      ],
+      "size": [
+        0.5,
+        0.25,
+        0.4
+      ],
+      "description": "Pillow on Bed 2."
+    },
+    {
+      "id": "poi_backpack_1",
+      "label": "Backpack 1",
+      "category": "Luggage / Suitcases",
+      "views_count": 27,
+      "position": [
+        -1.729,
+        -1.8,
+        -1.657
+      ],
+      "size": [
+        0.45,
+        0.55,
+        0.3
+      ],
+      "description": "Backpack on the chair / study corner."
+    },
+    {
+      "id": "poi_backpack_2",
+      "label": "Backpack 2",
+      "category": "Luggage / Suitcases",
+      "views_count": 18,
+      "position": [
+        -0.172,
+        -1.754,
+        -3.09
+      ],
+      "size": [
+        0.4,
+        0.5,
+        0.28
+      ],
+      "description": "Backpack under the study table."
+    },
+    {
+      "id": "poi_ac",
+      "label": "Air Conditioner (AC)",
+      "category": "Electronics",
+      "views_count": 33,
+      "position": [
+        2.016,
+        1.789,
+        3.416
+      ],
+      "size": [
+        0.95,
+        0.32,
+        0.25
+      ],
+      "description": "Wall mounted air conditioner unit."
+    }
+  ]
+}
