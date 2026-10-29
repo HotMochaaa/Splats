@@ -1,79 +1,103 @@
-"""Stage 1 — extract sharp, deduplicated frames from a capture video via ffmpeg.
-
-    python extract_frames.py --video data/raw/room.mp4 --out data/processed/scene-001/frames
-
-Defaults come from reconstruction/config/pipeline.json ('preprocess' block).
-Requires ffmpeg on PATH. Use --run to actually execute (default prints the plan).
-"""
 from __future__ import annotations
 
 import argparse
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline"))
-from tools import load_config, resolve_tool  # noqa: E402
+from tools import load_config, resolve_tool
 
+MIN_SAMPLES_FOR_FILTER = 20
+DEFAULT_FALLBACK_FPS = 2
 
-def extract(video: str, out_dir: str, full_cfg: dict, run: bool) -> int:
-    cfg = full_cfg.get("preprocess", {})
-    ffmpeg = resolve_tool("ffmpeg", full_cfg, "FFMPEG_BIN")
-    fps = cfg.get("fps", 2)
-    qscale = cfg.get("qscale", 2)
-    dedupe = cfg.get("dedupe", True)
-    max_width = cfg.get("max_width")
-    os.makedirs(out_dir, exist_ok=True)
+class FrameExtractionError(RuntimeError):
+    pass
 
-    # fps -> optional downscale (only if larger than max_width) -> dedupe.
-    vf = f"fps={fps}"
-    if max_width:
-        vf += f",scale='min(iw,{max_width})':-2"
-    if dedupe:
-        vf += ",mpdecimate"
-    cmd = [ffmpeg, "-y", "-i", video, "-vf", vf, "-qscale:v", str(qscale),
-           "-fps_mode", "vfr", os.path.join(out_dir, "frame_%05d.jpg")]
+def _purge_low_entropy_frames(target_dir: str, cutoff_pct: float) -> None:
+    if cutoff_pct <= 0:
+        return
 
-    print("[extract_frames]", " ".join(cmd))
-    if not run:
-        print("[extract_frames] dry-run (pass --run to execute)")
+    candidates = [
+        os.path.join(target_dir, fname)
+        for fname in os.listdir(target_dir)
+        if fname.lower().endswith(".jpg")
+    ]
+    if len(candidates) < MIN_SAMPLES_FOR_FILTER:
+        return
+
+    # Blurry JPEGs compress significantly smaller; rank by byte size as lightweight heuristic
+    candidates.sort(key=os.path.getsize)
+    n_drop = int(len(candidates) * (cutoff_pct / 100.0))
+    for doomed_path in candidates[:n_drop]:
+        try:
+            os.remove(doomed_path)
+        except OSError:
+            pass  # Non-fatal if another process holds temporary lock
+
+    if n_drop:
+        print(f"[extract_frames] discarded {n_drop} low-entropy/blurry frames (bottom {cutoff_pct}%)")
+
+def extract(video_path: str, output_folder: str, pipeline_cfg: dict, execute: bool) -> int:
+    """Extracts curated video frames via ffmpeg with duplicate suppression."""
+    opts = pipeline_cfg.get('preprocess', {})
+    bin_ffmpeg = resolve_tool("ffmpeg", pipeline_cfg, "FFMPEG_BIN")
+    fps_rate = opts.get("fps", DEFAULT_FALLBACK_FPS)
+    q_val = opts.get('qscale', 2)
+    use_dedupe = opts.get("dedupe", True)
+    width_limit = opts.get('max_width')
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    filter_chain = f"fps={fps_rate}"
+    if width_limit:
+        filter_chain += f",scale='min(iw,{width_limit})':-2"
+    if use_dedupe:
+        # mpdecimate drops identical consecutive frames from static captures
+        filter_chain += ",mpdecimate"
+
+    dest_pattern = os.path.join(output_folder, "frame_%05d.jpg")
+    args = [
+        bin_ffmpeg, "-y", "-i", video_path,
+        "-vf", filter_chain,
+        "-qscale:v", str(q_val),
+        "-fps_mode", "vfr",
+        dest_pattern
+    ]
+
+    print("[extract_frames]", " ".join(args))
+    if not execute:
+        print("[extract_frames] dry-run complete (pass --run to spawn subprocess)")
         return 0
 
-    rc = subprocess.call(cmd)
-    if rc != 0:
-        print("[extract_frames] ffmpeg failed", file=sys.stderr)
-        return rc
+    proc = subprocess.run(args)
+    if proc.returncode != 0:
+        raise FrameExtractionError(f"ffmpeg invocation terminated with code {proc.returncode}")
 
-    _drop_blurry(out_dir, cfg.get("blur_drop_percentile", 5))
-    n = len([f for f in os.listdir(out_dir) if f.lower().endswith(".jpg")])
-    print(f"[extract_frames] {n} frames in {out_dir}")
+    _purge_low_entropy_frames(output_folder, opts.get('blur_drop_percentile', 5.0))
+    
+    retained = [f for f in os.listdir(output_folder) if f.lower().endswith(('.jpg', '.jpeg'))]
+    if (count := len(retained)) == 0:
+        print(f"[extract_frames] warning: zero frames extracted into {output_folder}", file=sys.stderr)
+    else:
+        print(f"[extract_frames] successfully staged {count} curated frames in {output_folder}")
     return 0
 
-
-def _drop_blurry(out_dir: str, percentile: float) -> None:
-    """Cheap blur filter: blurry JPEGs compress smaller, so drop the smallest N%."""
-    if percentile <= 0:
-        return
-    jpgs = [os.path.join(out_dir, f) for f in os.listdir(out_dir) if f.lower().endswith(".jpg")]
-    if len(jpgs) < 20:
-        return
-    jpgs.sort(key=os.path.getsize)
-    k = int(len(jpgs) * percentile / 100.0)
-    for p in jpgs[:k]:
-        os.remove(p)
-    if k:
-        print(f"[extract_frames] dropped {k} likely-blurry frames (smallest {percentile}%)")
-
-
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--video", required=True)
-    ap.add_argument("--out", required=True)
-    ap.add_argument("--config", default="reconstruction/config/pipeline.json")
-    ap.add_argument("--run", action="store_true", help="execute (default: dry-run)")
-    args = ap.parse_args(argv)
-    return extract(args.video, args.out, load_config(args.config), args.run)
+    cli = argparse.ArgumentParser(description="Curated video frame extraction pipeline.")
+    cli.add_argument("--video", required=True, help="path to source walkthrough video")
+    cli.add_argument("--out", required=True, help="destination frame directory")
+    cli.add_argument("--config", default="reconstruction/config/pipeline.json")
+    cli.add_argument("--run", action="store_true", help="execute live subprocess")
+    parsed = cli.parse_args(argv)
 
+    cfg_dict = load_config(parsed.config)
+    try:
+        return extract(parsed.video, parsed.out, cfg_dict, parsed.run)
+    except FrameExtractionError as exc:
+        print(f"[extract_frames:err] {exc}", file=sys.stderr)
+        return 1
 
 if __name__ == "__main__":
     raise SystemExit(main())

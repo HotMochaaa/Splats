@@ -1,5 +1,3 @@
-// Headless screenshot of the running viewer so we can see the splat render.
-// Usage: node shot.mjs [outPath] [waitMs]
 import { chromium } from 'playwright';
 import fs from 'fs';
 
@@ -25,7 +23,7 @@ page.on('console', (m) => console.log('[page]', m.text()));
 page.on('pageerror', (e) => console.log('[pageerror]', e.message));
 
 await page.goto(process.env.SHOT_URL || 'http://localhost:5173/', { waitUntil: 'load' });
-// Reveal the scene (skip the click-to-enter overlay + crosshair).
+
 await page.evaluate(() => {
   const o = document.getElementById('overlay'); if (o) o.classList.add('hidden');
 });

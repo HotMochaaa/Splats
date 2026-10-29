@@ -2,16 +2,6 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
 
-/**
- * Loads a scene bundle described by scene.json — the ONLY contract between the
- * reconstruction pipeline and the viewer. The viewer never needs to know how the
- * geometry was produced (COLMAP mesh, Gaussian splat, etc.).
- *
- * scene.json.assets:
- *   { "mesh": "path/to/model.glb" }  -> loaded via GLTFLoader
- *   { "splat": "..." }               -> reserved for M2 (Gaussian splatting)
- *   both null                        -> procedural placeholder room (M1)
- */
 export async function loadScene(sceneUrl) {
   const config = await fetch(sceneUrl).then((r) => {
     if (!r.ok) throw new Error(`scene.json not found: ${sceneUrl} (${r.status})`);
@@ -60,7 +50,7 @@ export async function loadScene(sceneUrl) {
       } catch (err2) {
         console.error('[sceneLoader] All asset loaders failed:', err2);
         debug.splatError = String(err2);
-        // Do NOT fall back to fake room if user wants real failure surfaced
+
         throw new Error(`Failed to load asset ${assets.splat}: ${e.message}`);
       }
     }
@@ -68,8 +58,6 @@ export async function loadScene(sceneUrl) {
     throw new Error("No asset specified in scene.json (assets.splat and assets.mesh are null). Please train or supply a 3DGS splat model.");
   }
 
-  // Reference gizmos (red bounds box + origin axes) — off by default, shown with
-  // ?debug in the URL for diagnosing camera/orientation issues.
   const showDebug = typeof location !== 'undefined'
     && new URLSearchParams(location.search).has('debug');
   if (config.bounds && showDebug) {
@@ -82,11 +70,6 @@ export async function loadScene(sceneUrl) {
   return { config, root, debug };
 }
 
-/**
- * Load a 3D Gaussian-splat .ply (INRIA/Brush layout) as a colored THREE.Points
- * cloud. Reads xyz + f_dc (SH DC -> base color) + opacity, drops low-opacity
- * floaters and points far outside the scene bounds, and sizes points to the scene.
- */
 async function loadPlyAsPoints(url, config) {
   const text = await fetch(url).then((r) => {
     if (!r.ok) throw new Error(`ply not found: ${url} (${r.status})`);
@@ -173,11 +156,6 @@ async function loadPlyAsPoints(url, config) {
   return points;
 }
 
-/**
- * A simple, well-lit procedural room so the viewer runs offline with zero
- * downloaded assets (RULE 3: this is a placeholder, never the final demo scene).
- * Textured floor + walls + a few props give clear motion & depth cues.
- */
 function buildPlaceholderRoom(config) {
   const group = new THREE.Group();
   group.name = 'placeholder-room';
@@ -224,7 +202,6 @@ function buildPlaceholderRoom(config) {
   addWall(d, h, min.x, midY, cz, Math.PI / 2);
   addWall(d, h, max.x, midY, cz, -Math.PI / 2);
 
-  // A few colored props for depth/motion cues and orientation.
   const props = [
     { c: 0xe06c75, pos: [cx - 2.5, min.y + 0.5, cz - 1.5], size: [1, 1, 1] },
     { c: 0x61afef, pos: [cx + 2.2, min.y + 0.75, cz + 1.0], size: [0.8, 1.5, 0.8] },
@@ -240,7 +217,6 @@ function buildPlaceholderRoom(config) {
     group.add(m);
   }
 
-  // Lighting.
   group.add(new THREE.HemisphereLight(0xbfd4ff, 0x202830, 0.7));
   const key = new THREE.DirectionalLight(0xffffff, 1.1);
   key.position.set(cx + 3, max.y + 2, cz + 3);

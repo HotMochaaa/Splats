@@ -1,4 +1,3 @@
-"""Convert COLMAP sparse model points3D.txt into a standard 3D PLY point cloud file."""
 import os
 import sys
 

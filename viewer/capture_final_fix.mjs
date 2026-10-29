@@ -24,11 +24,9 @@ await page.waitForFunction(() => {
 
 await new Promise(r => setTimeout(r, 4000));
 
-// 1. Capture standard room view
 await page.screenshot({ path: 'shot_v3B_fix1_room.png' });
 console.log('SAVED: shot_v3B_fix1_room.png');
 
-// 2. Look upward at upper wall / ceiling
 const canvas = await page.$('canvas');
 const box = await canvas.boundingBox();
 if (box) {
@@ -41,7 +39,6 @@ await new Promise(r => setTimeout(r, 3000));
 await page.screenshot({ path: 'shot_v3B_fix1_ceiling.png' });
 console.log('SAVED: shot_v3B_fix1_ceiling.png');
 
-// 3. Toggle Angle Limit
 await page.evaluate(() => {
   document.getElementById('btn-angle-limit')?.click();
 });

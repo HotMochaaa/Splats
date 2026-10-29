@@ -1,18 +1,3 @@
-"""Stage 3 — train a 3D Gaussian Splat from a COLMAP workspace.
-
-    python train_splat.py --dataset data/processed/scene-001 \\
-        --out data/processed/scene-001/train
-
---dataset is a COLMAP workspace containing images/ and sparse/0/. Backends
-(pipeline.json 'train.backend'):
-  - brush      : WebGPU trainer, no CUDA — loads the workspace directly, exports .ply
-  - nerfstudio : ns-process-data (ingest COLMAP) + ns-train splatfacto
-  - gsplat     : custom script hook (documented TODO)
-
-Tool paths resolve via env (BRUSH_BIN / NS_BIN) -> config 'tools' -> PATH.
-Prints commands by default; pass --run to execute. Export the trained splat to
-.ply, then compress to .sog/.spz/.ksplat for the web (see docs/reconstruction.md).
-"""
 from __future__ import annotations
 
 import argparse
@@ -21,107 +6,124 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from tools import load_config, resolve_tool  # noqa: E402
+from tools import load_config, resolve_tool
 
+DEFAULT_TRAIN_STEPS = 30000
+BRUSH_LOAD_RETRIES = 8
 
-def _commands(backend: str, dataset: str, out: str, iters: int, full_cfg: dict) -> list[list[str]]:
-    images = os.path.join(dataset, "images")
-    model = os.path.join(dataset, "sparse", "0")
-    if backend == "brush":
-        brush = os.path.normpath(resolve_tool("brush_app", full_cfg, "BRUSH_BIN"))
-        train_cfg = full_cfg.get("train", {})
-        cmd = [brush, os.path.normpath(dataset),
-               "--total-steps", str(iters),
-               "--export-every", str(iters),
-               "--export-path", os.path.normpath(out),
-               "--export-name", "scene.ply"]
-        if "growth_stop_iter" in train_cfg:
-            cmd.extend(["--growth-stop-iter", str(train_cfg["growth_stop_iter"])])
-        if "growth_grad_threshold" in train_cfg:
-            cmd.extend(["--growth-grad-threshold", str(train_cfg["growth_grad_threshold"])])
-        if "refine_every" in train_cfg:
-            cmd.extend(["--refine-every", str(train_cfg["refine_every"])])
-        return [cmd]
-    if backend == "nerfstudio":
-        processed = os.path.join(out, "nerfstudio")
-        return [
-            ["ns-process-data", "images", "--data", images,
-             "--output-dir", processed, "--skip-colmap", "--colmap-model-path", model],
-            ["ns-train", "splatfacto", "--data", processed,
-             "--max-num-iterations", str(iters), "--output-dir", out],
+class TrainingSubprocessError(RuntimeError):
+    pass
+
+def _resolve_train_cli(engine: str, dataset_dir: str, out_dir: str, iterations: int, global_cfg: dict) -> list[list[str]]:
+    images_folder = os.path.join(dataset_dir, "images")
+    sparse_model = os.path.join(dataset_dir, "sparse", "0")
+
+    if engine == "brush":
+        bin_brush = os.path.normpath(resolve_tool("brush_app", global_cfg, "BRUSH_BIN"))
+        train_opts = global_cfg.get("train", {})
+        cli = [
+            bin_brush, os.path.normpath(dataset_dir),
+            "--total-steps", str(iterations),
+            "--export-every", str(iterations),
+            "--export-path", os.path.normpath(out_dir),
+            "--export-name", "scene.ply"
         ]
-    if backend == "gsplat":
+        if "growth_stop_iter" in train_opts:
+            cli.extend(["--growth-stop-iter", str(train_opts["growth_stop_iter"])])
+        if "growth_grad_threshold" in train_opts:
+            cli.extend(["--growth-grad-threshold", str(train_opts["growth_grad_threshold"])])
+        if "refine_every" in train_opts:
+            cli.extend(["--refine-every", str(train_opts["refine_every"])])
+        return [cli]
+
+    if engine == "nerfstudio":
+        interim_dir = os.path.join(out_dir, "nerfstudio")
+        return [
+            ["ns-process-data", "images", "--data", images_folder,
+             "--output-dir", interim_dir, "--skip-colmap", "--colmap-model-path", sparse_model],
+            ["ns-train", "splatfacto", "--data", interim_dir,
+             "--max-num-iterations", str(iterations), "--output-dir", out_dir],
+        ]
+
+    if engine == "gsplat":
         return [["python", "-m", "gsplat.examples.simple_trainer", "default",
-                 "--data-dir", dataset, "--result-dir", out]]
-    raise ValueError(f"unknown train backend: {backend!r}")
+                 "--data-dir", dataset_dir, "--result-dir", out_dir]]
 
+    raise TrainingSubprocessError(f"unrecognized 3DGS backend engine: '{engine}'")
 
-def train(dataset: str, out: str, full_cfg: dict, run: bool) -> int:
-    cfg = full_cfg.get("train", {})
-    backend = cfg.get("backend", "brush")
-    iters = cfg.get("max_iterations", 30000)
-    retries = cfg.get("load_retries", 8)
-    cmds = _commands(backend, dataset, out, iters, full_cfg)
+def train(dataset_root: str, export_folder: str, pipeline_cfg: dict, execute_live: bool) -> int:
+    """Invokes 3DGS trainer on COLMAP sparse cloud, runs floater pruning and ksplat conversion."""
+    t_cfg = pipeline_cfg.get("train", {})
+    engine_backend = t_cfg.get("backend", "brush")
+    total_steps = t_cfg.get("max_iterations", DEFAULT_TRAIN_STEPS)
+    max_retries = t_cfg.get("load_retries", BRUSH_LOAD_RETRIES)
+    commands = _resolve_train_cli(engine_backend, dataset_root, export_folder, total_steps, pipeline_cfg)
 
-    print(f"[train_splat] backend={backend} iterations={iters} dataset={dataset}")
-    for cmd in cmds:
-        print("[train_splat]", " ".join(cmd))
-    if not run:
-        print("[train_splat] dry-run (pass --run to execute)")
+    print(f"[train_splat] engine={engine_backend} steps={total_steps} dataset={dataset_root}")
+    for c in commands:
+        print("[train_splat]", " ".join(c))
+
+    if not execute_live:
+        print("[train_splat] dry-run complete (pass --run to execute training)")
         return 0
 
-    os.makedirs(out, exist_ok=True)
+    os.makedirs(export_folder, exist_ok=True)
 
-    # Brush 0.3.0 has a race in its concurrent dataset loader that intermittently
-    # aborts with "IO error ... early eof" before training starts. It fails fast
-    # and returns nonzero, so retry until a load sticks. Success is confirmed by
-    # the exported .ply (Brush exports "scene.ply" here).
-    if backend == "brush":
-        target = os.path.join(out, "scene.ply")
-        for attempt in range(1, retries + 1):
-            if os.path.exists(target):
-                os.remove(target)
-            rc = subprocess.call(cmds[0])
-            if rc == 0 and os.path.exists(target):
-                print(f"[train_splat] trained on attempt {attempt}; exported {target}")
-                clean_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clean_splat.py")
-                if os.path.exists(clean_script):
-                    print("[train_splat] Running floater suppression...")
-                    temp_clean = target + ".clean.ply"
-                    clean_rc = subprocess.call([sys.executable, clean_script, "--in", target, "--out", temp_clean])
-                    if clean_rc == 0 and os.path.exists(temp_clean):
-                        os.replace(temp_clean, target)
-                        print("[train_splat] Floater suppression complete.")
-                ksplat_target = os.path.splitext(target)[0] + ".ksplat"
-                convert_script = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "viewer", "convert-ksplat.mjs")
-                if os.path.exists(convert_script):
-                    print("[train_splat] Converting to compressed ksplat...")
-                    subprocess.call(["node", convert_script, target, ksplat_target])
+    # Brush 0.3.0 has a known race condition in its multi-threaded dataset loader
+    # that intermittently returns early EOF. Retry loop handles this transparently.
+    if engine_backend == "brush":
+        ply_out = os.path.join(export_folder, "scene.ply")
+        for attempt in range(1, max_retries + 1):
+            if os.path.exists(ply_out):
+                os.remove(ply_out)
+
+            status = subprocess.call(commands[0])
+            if status == 0 and os.path.exists(ply_out):
+                print(f"[train_splat] training converged on attempt #{attempt}; target: {ply_out}")
+                
+                # Automated post-processing: Floater Pruning
+                clean_py = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clean_splat.py")
+                if os.path.exists(clean_py):
+                    tmp_clean = ply_out + ".clean.ply"
+                    if subprocess.call([sys.executable, clean_py, "--in", ply_out, "--out", tmp_clean]) == 0:
+                        if os.path.exists(tmp_clean):
+                            os.replace(tmp_clean, ply_out)
+                            print("[train_splat] floater suppression pass finished successfully.")
+
+                # Automated compression: Node.js ksplat packaging
+                ksplat_path = os.path.splitext(ply_out)[0] + ".ksplat"
+                mjs_converter = os.path.join(
+                    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                    "viewer", "convert-ksplat.mjs"
+                )
+                if os.path.exists(mjs_converter):
+                    subprocess.call(["node", mjs_converter, ply_out, ksplat_path])
                 return 0
-            print(f"[train_splat] attempt {attempt}/{retries} failed to load "
-                  f"(Brush concurrent-load race); retrying", file=sys.stderr)
-        print(f"[train_splat] Brush failed to load after {retries} attempts", file=sys.stderr)
-        return 1
 
-    for cmd in cmds:
-        rc = subprocess.call(cmd)
-        if rc != 0:
-            print(f"[train_splat] command failed: {cmd[0]}", file=sys.stderr)
-            return rc
-    print(f"[train_splat] exported under {out}; compress the .ply for the web")
+            print(f"[train_splat] attempt {attempt}/{max_retries} encountered loader contention; retrying...", file=sys.stderr)
+
+        raise TrainingSubprocessError(f"Brush loader failed to ingest dataset after {max_retries} attempts")
+
+    for cmd_tokens in commands:
+        if (code := subprocess.call(cmd_tokens)) != 0:
+            raise TrainingSubprocessError(f"command '{cmd_tokens[0]}' exited with code {code}")
+
     return 0
 
-
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--dataset", required=True, help="COLMAP workspace (images/ + sparse/0/)")
-    ap.add_argument("--out", required=True)
-    ap.add_argument("--config", default="reconstruction/config/pipeline.json")
-    ap.add_argument("--run", action="store_true", help="execute (default: dry-run)")
-    args = ap.parse_args(argv)
-    return train(args.dataset, args.out, load_config(args.config), args.run)
+    cli = argparse.ArgumentParser(description="3D Gaussian Splatting training orchestrator.")
+    cli.add_argument("--dataset", required=True, help="path to COLMAP workspace (images/ and sparse/0/)")
+    cli.add_argument("--out", required=True, help="directory for exported checkpoint and ply")
+    cli.add_argument("--config", default="reconstruction/config/pipeline.json")
+    cli.add_argument("--run", action="store_true", help="execute live training job")
+    args = cli.parse_args(argv)
 
+    cfg = load_config(args.config)
+    try:
+        return train(args.dataset, args.out, cfg, args.run)
+    except TrainingSubprocessError as exc:
+        print(f"[train_splat:err] {exc}", file=sys.stderr)
+        return 1
 
 if __name__ == "__main__":
     raise SystemExit(main())

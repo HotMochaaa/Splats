@@ -1,9 +1,3 @@
-"""Train v3B and v3C variants using brush_app.exe with:
-- SH degree 2
-- 10th frame eval holdout (--eval-split-every 10 --eval-every 1000)
-- Variant B: max_iterations 30000, growth_stop_iter 6000, growth_grad_threshold 0.00004, max-splats 1000000
-- Variant C: max_iterations 30000, growth_stop_iter 8000, growth_grad_threshold 0.00002, max-splats 1500000
-"""
 import os
 import sys
 import subprocess
@@ -16,7 +10,7 @@ DATA_DIR = "data/processed/custom-video-v3"
 def train_variant(name, total_steps, growth_stop_iter, growth_grad_thresh, max_splats, sh_degree=2):
     export_dir = os.path.join(DATA_DIR, f"train_{name}")
     os.makedirs(export_dir, exist_ok=True)
-    
+
     cmd = [
         BRUSH_BIN, DATA_DIR,
         "--total-steps", str(total_steps),
@@ -30,43 +24,42 @@ def train_variant(name, total_steps, growth_stop_iter, growth_grad_thresh, max_s
         "--export-path", export_dir,
         "--export-name", "scene.ply"
     ]
-    
+
     print(f"\n==========================================")
     print(f"Starting Training Variant {name}")
     print(f"Command: {' '.join(cmd)}")
     print(f"==========================================\n")
-    
+
     t0 = time.time()
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
-    
+
     splats_at_growth_stop = None
     final_splats = None
     eval_metrics = []
-    
+
     for line in proc.stdout:
         print(line, end="")
-        
-        # Parse step logs e.g., iteration, splats, psnr, ssim
+
         if f"iter: {growth_stop_iter}" in line or f"step {growth_stop_iter}" in line:
             splats_match = re.search(r"(\d+[\d,]*)\s*splats", line)
             if splats_match:
                 splats_at_growth_stop = splats_match.group(1)
-        
+
         splat_search = re.search(r"(\d+[\d,]*)\s*splats", line)
         if splat_search:
             final_splats = splat_search.group(1)
-            
+
         if "eval" in line.lower() or "psnr" in line.lower() or "ssim" in line.lower():
             eval_metrics.append(line.strip())
-            
+
     proc.wait()
     t1 = time.time()
-    
+
     print(f"\nVariant {name} completed in {t1 - t0:.1f}s with exit code {proc.returncode}")
     print(f"Growth stop ({growth_stop_iter}) splats: {splats_at_growth_stop}")
     print(f"Final splat count: {final_splats}")
     print(f"Eval metrics log: {eval_metrics[-5:] if eval_metrics else 'N/A'}")
-    
+
     return proc.returncode
 
 if __name__ == "__main__":

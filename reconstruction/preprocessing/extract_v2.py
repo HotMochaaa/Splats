@@ -1,7 +1,3 @@
-"""Stage 1 for custom-video-v2:
-Extract ~7.5 fps, downscale/scale to 1080x1920 portrait, compute Laplacian sharpness,
-and retain the sharpest ~700 frames.
-"""
 import os
 import sys
 import glob
@@ -25,14 +21,13 @@ def main():
     os.makedirs(TEMP_DIR, exist_ok=True)
     os.makedirs(OUT_DIR, exist_ok=True)
 
-    # Clean existing temp
     for f in glob.glob(os.path.join(TEMP_DIR, "*.jpg")):
         os.remove(f)
     for f in glob.glob(os.path.join(OUT_DIR, "*.jpg")):
         os.remove(f)
 
     print(f"[extract_v2] Extracting frames at {FPS} fps scaled to 1080x1920 portrait...")
-    # ffmpeg automatically applies autorotation for -90 display matrix, then scales to 1080:1920
+
     cmd = [
         FFMPEG, "-y", "-i", VIDEO,
         "-vf", f"fps={FPS},scale=1080:1920:flags=lanczos",
@@ -64,9 +59,8 @@ def main():
 
     print(f"[extract_v2] Scored {len(scored)} frames.")
 
-    # Determine which frames to keep
     if len(scored) > TARGET_COUNT:
-        # Sort by sharpness descending to find cutoff
+
         by_sharpness = sorted(scored, key=lambda x: x[1], reverse=True)
         keep_set = set(p for p, _ in by_sharpness[:TARGET_COUNT])
         print(f"[extract_v2] Dropping {len(scored) - TARGET_COUNT} blurriest frames.")
@@ -74,7 +68,6 @@ def main():
         keep_set = set(p for p, _ in scored)
         print(f"[extract_v2] Keeping all {len(keep_set)} frames.")
 
-    # Copy kept frames in original chronological order to OUT_DIR with clean numbering
     final_count = 0
     for p in extracted_files:
         if p in keep_set:
@@ -82,13 +75,11 @@ def main():
             dst = os.path.join(OUT_DIR, f"frame_{final_count:05d}.jpg")
             shutil.copyfile(p, dst)
 
-    # Check first image dimensions
     sample_img = cv2.imread(os.path.join(OUT_DIR, "frame_00001.jpg"))
     h, w, c = sample_img.shape
     print(f"[extract_v2] Completed! {final_count} sharp frames saved to {OUT_DIR}")
     print(f"[extract_v2] Verified frame resolution: {w}x{h} (portrait)")
 
-    # Clean up temp dir
     shutil.rmtree(TEMP_DIR, ignore_errors=True)
     return 0
 

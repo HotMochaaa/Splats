@@ -1,18 +1,14 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 
-/**
- * Desktop free-roam controller.
- * - PointerLockControls handles mouse-look + pointer lock (Esc releases).
- * - WASD moves on the horizontal plane; Q/E fly down/up when player.flyVertical
- *   is set (useful while a reconstruction's floor/scale is uncertain).
- * - Camera stays within scene bounds (with margin). When flyVertical is off, Y is
- *   pinned to eyeHeight (the capture height); real floor-following/collision is M3.
- */
 export class FirstPersonControls {
   constructor(camera, domElement, sceneConfig) {
     this.camera = camera;
     this.controls = new PointerLockControls(camera, domElement);
+
+    this.limitLookUp = true;
+    this.controls.minPolarAngle = Math.PI * 0.25;
+    this.controls.maxPolarAngle = Math.PI * 0.95;
 
     const p = sceneConfig.player || {};
     this.eyeHeight = p.eyeHeight ?? 1.6;
@@ -21,7 +17,7 @@ export class FirstPersonControls {
     this.flyVertical = p.flyVertical ?? false;
 
     const b = sceneConfig.bounds || { min: [-50, 0, -50], max: [50, 10, 50] };
-    // Clamp strictly inside room bounds with 0.3m safety padding from walls
+
     this.min = new THREE.Vector3().fromArray(b.min).addScalar(0.3);
     this.max = new THREE.Vector3().fromArray(b.max).subScalar(0.3);
 
@@ -67,19 +63,18 @@ export class FirstPersonControls {
   reset() {
     const s = this.spawn.position;
     this.camera.position.set(s[0], s[1] ?? this.eyeHeight, s[2]);
-    // PointerLockControls yaw is the camera's Y rotation; pitch resets to level.
+
     this.camera.rotation.set(0, this.spawn.yaw ?? 0, 0, 'YXZ');
     this._velocity.set(0, 0, 0);
   }
 
   update(dt) {
-    // Camera-relative basis, flattened to the walking plane.
+
     this.camera.getWorldDirection(this._forward);
     this._forward.y = 0;
     this._forward.normalize();
     this._right.crossVectors(this._forward, this.camera.up).normalize();
 
-    // Desired ("wish") velocity from the keys.
     const speed = this.walkSpeed * (this.keys.sprint ? this.sprintMultiplier : 1);
     const wish = new THREE.Vector3();
     if (this.keys.forward) wish.add(this._forward);
@@ -93,15 +88,12 @@ export class FirstPersonControls {
       if (this.keys.down) wishY -= speed;
     }
 
-    // Smoothly accelerate/decelerate toward the wish velocity (frame-rate
-    // independent), so movement eases in and coasts to a stop instead of snapping.
     const t = 1 - Math.exp(-12 * dt);
     this._velocity.x += (wish.x - this._velocity.x) * t;
     this._velocity.z += (wish.z - this._velocity.z) * t;
     this._velocity.y += (wishY - this._velocity.y) * t;
     this.camera.position.addScaledVector(this._velocity, dt);
 
-    // Constraints: hold eye height when grounded; clamp inside padded bounds.
     if (!this.flyVertical) {
       this.camera.position.y = this.eyeHeight;
     } else {
@@ -110,11 +102,17 @@ export class FirstPersonControls {
     this.camera.position.x = THREE.MathUtils.clamp(this.camera.position.x, this.min.x, this.max.x);
     this.camera.position.z = THREE.MathUtils.clamp(this.camera.position.z, this.min.z, this.max.z);
 
-    // Optional soft look-up angle limit (default off)
     if (this.limitLookUp) {
-      // Clamp pitch between -70 deg and +45 deg to prevent looking into uncaptured ceiling voids
-      this.camera.rotation.x = THREE.MathUtils.clamp(this.camera.rotation.x, -Math.PI / 4, Math.PI / 2.5);
+      const maxUp = Math.PI * 0.28;
+      if (this.camera.rotation.x > maxUp) {
+        this.camera.rotation.x = THREE.MathUtils.lerp(this.camera.rotation.x, maxUp, 1 - Math.exp(-15 * dt));
+      }
     }
+  }
+
+  setAngleLimit(enabled) {
+    this.limitLookUp = enabled;
+    this.controls.minPolarAngle = enabled ? Math.PI * 0.25 : 0.05;
   }
 
   dispose() {

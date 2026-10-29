@@ -3,23 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <title>Splat renderer test</title>
-    <style>
-      html,body{margin:0;height:100%;background:#111;overflow:hidden}
+    <style>html,body{margin:0;height:100%;background:#111;overflow:hidden}
       #diag{position:fixed;top:0;left:0;z-index:9;max-width:60vw;max-height:100vh;overflow:auto;
         color:#9fe;background:rgba(0,0,0,.7);font:12px/1.5 monospace;padding:10px;white-space:pre-wrap}
-    </style>
+</style>
   </head>
   <body>
     <div id="diag"></div>
-    <script type="module">
-      const diag = document.getElementById('diag');
+    <script type="module">const diag = document.getElementById('diag');
       const say = (m) => { diag.textContent += m + '\n'; };
       window.addEventListener('error', (e) => say('window.error: ' + e.message));
       window.addEventListener('unhandledrejection', (e) => say('promise: ' + (e.reason && e.reason.message || e.reason)));
       const _e = console.error.bind(console); console.error = (...a)=>{ say('console.error: ' + a.map(String).join(' ')); _e(...a); };
       const _w = console.warn.bind(console); console.warn = (...a)=>{ say('warn: ' + a.map(String).join(' ')); _w(...a); };
 
-      // --- GPU / WebGL2 capability report ---
       try {
         const c = document.createElement('canvas');
         const gl = c.getContext('webgl2');
@@ -56,6 +53,6 @@
           say('viewer.start() called — drag to orbit');
         }).catch((e) => say('LOAD ERROR: ' + (e && e.message ? e.message : e)));
       }).catch((e) => say('import error: ' + e.message));
-    </script>
+</script>
   </body>
 </html>

@@ -1,20 +1,4 @@
 #!/usr/bin/env python3
-"""End-to-end reconstruction orchestrator: capture video -> viewer scene bundle.
-
-    # see the full plan without running anything (no tools needed):
-    python scripts/reconstruct.py --video data/raw/room.mp4 --scene-id scene-001
-
-    # run for real once ffmpeg + COLMAP + a trainer are installed:
-    python scripts/reconstruct.py --video data/raw/room.mp4 --scene-id scene-001 --run
-
-Stages (select a subset with --stage): frames -> colmap -> train -> scene.
-Layout produced:
-    data/processed/<scene-id>/{frames,colmap,train}
-    output/scenes/<scene-id>/{scene.json,splat/,mesh/}
-
-Point the viewer at a finished bundle by copying it under viewer/public/scenes/
-(or serving output/scenes/) and setting SCENE_URL in viewer/src/main.js.
-"""
 from __future__ import annotations
 
 import argparse
@@ -24,96 +8,100 @@ import shutil
 import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STAGES = ["frames", "colmap", "train", "scene"]
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+AVAILABLE_STAGES = ("frames", "colmap", "train", "scene")
 
+class OrchestrationError(RuntimeError):
+    pass
 
-def _py(script: str, args: list[str], run: bool, add_run: bool = True) -> int:
-    cmd = [sys.executable, os.path.join(ROOT, script), *args]
-    if run and add_run:
-        cmd.append("--run")
-    print(f"\n=== {script} ===")
-    rc = subprocess.call(cmd, cwd=ROOT)
-    if rc != 0:
-        print(f"[reconstruct] {script} exited {rc}", file=sys.stderr)
-    return rc
+def _spawn_stage_py(script_relpath: str, stage_args: list[str], should_run: bool, append_run_flag: bool = True) -> int:
+    exec_cmd = [sys.executable, os.path.join(PROJECT_ROOT, script_relpath), *stage_args]
+    if should_run and append_run_flag:
+        exec_cmd.append("--run")
 
+    print(f"\n>>> Stage: {script_relpath}")
+    status = subprocess.call(exec_cmd, cwd=PROJECT_ROOT)
+    if status != 0:
+        raise OrchestrationError(f"{script_relpath} exited with code {status}")
+    return status
 
-def _find_splat(train_dir: str) -> str | None:
-    for ext in ("*.ksplat", "*.sog", "*.spz", "*.ply"):
-        hits = glob.glob(os.path.join(train_dir, "**", ext), recursive=True)
-        if hits:
-            return hits[0]
+def _discover_trained_splat(train_dir: str) -> str | None:
+    for file_ext in ("*.ksplat", "*.sog", "*.spz", "*.ply"):
+        matched_files = glob.glob(os.path.join(train_dir, "**", file_ext), recursive=True)
+        if matched_files:
+            return matched_files[0]
     return None
 
-
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--video", required=True)
-    ap.add_argument("--scene-id", default="custom-video", help="Scene identifier (default: custom-video)")
-    ap.add_argument("--config", default="reconstruction/config/pipeline.json")
-    ap.add_argument("--stage", choices=STAGES + ["all"], default="all")
-    ap.add_argument("--run", action="store_true", help="execute (default: dry-run)")
-    args = ap.parse_args(argv)
+    cli = argparse.ArgumentParser(description="Multi-stage indoor reconstruction pipeline orchestrator.")
+    cli.add_argument("--video", required=True, help="source capture video path")
+    cli.add_argument("--scene-id", default="custom-video", help="unique scene bundle identifier")
+    cli.add_argument("--config", default="reconstruction/config/pipeline.json")
+    cli.add_argument("--stage", choices=list(AVAILABLE_STAGES) + ["all"], default="all")
+    cli.add_argument("--run", action="store_true", help="execute live reconstruction")
+    args = cli.parse_args(argv)
 
-    # Standard COLMAP workspace layout so Brush/nerfstudio ingest it directly:
-    #   data/processed/<id>/{images/, database.db, sparse/0/, train/}
-    proc = os.path.join("data", "processed", args.scene_id)
-    images = os.path.join(proc, "images")
-    train = os.path.join(proc, "train")
-    model = os.path.join(proc, "sparse", "0")
-    scene_out = os.path.join("output", "scenes", args.scene_id)
-    stages = STAGES if args.stage == "all" else [args.stage]
+    proc_dir = os.path.join("data", "processed", args.scene_id)
+    frames_path = os.path.join(proc_dir, "images")
+    train_path = os.path.join(proc_dir, "train")
+    model_path = os.path.join(proc_dir, "sparse", "0")
+    scene_bundle = os.path.join("output", "scenes", args.scene_id)
+    
+    stages_to_run = AVAILABLE_STAGES if args.stage == "all" else (args.stage,)
 
-    if "frames" in stages:
-        if _py("reconstruction/preprocessing/extract_frames.py",
-               ["--video", args.video, "--out", images, "--config", args.config], args.run):
-            return 1
-    if "colmap" in stages:
-        if _py("reconstruction/pipeline/run_colmap.py",
-               ["--frames", images, "--out", proc, "--config", args.config], args.run):
-            return 1
-    if "train" in stages:
-        if _py("reconstruction/pipeline/train_splat.py",
-               ["--dataset", proc, "--out", train, "--config", args.config], args.run):
-            return 1
-    if "scene" in stages:
-        scene_args = ["--model", model, "--out", scene_out, "--config", args.config]
-        splat = _find_splat(train)
-        if splat:
-            scene_args += ["--splat", splat]
-            print(f"[reconstruct] including splat: {splat}")
-        else:
-            print("[reconstruct] no splat found in train dir; scene.json will have "
-                  "assets.splat=null (fill in once training exports one)")
-        # build_scene has no external deps and no --run flag; it executes whenever
-        # a COLMAP TXT model already exists (lets you preview scene.json even in a
-        # dry-run). With no model yet, just show the command it would run.
-        if args.run or os.path.exists(os.path.join(model, "images.txt")):
-            if _py("reconstruction/pipeline/build_scene.py", scene_args, args.run,
-                   add_run=False):
-                return 1
-            # Deploy to viewer public scenes automatically
-            viewer_scene_dir = os.path.join(ROOT, "viewer", "public", "scenes", args.scene_id)
-            os.makedirs(viewer_scene_dir, exist_ok=True)
-            for item in os.listdir(scene_out):
-                s = os.path.join(scene_out, item)
-                d = os.path.join(viewer_scene_dir, item)
-                if os.path.isdir(s):
-                    shutil.copytree(s, d, dirs_exist_ok=True)
-                else:
-                    shutil.copy2(s, d)
-            print(f"[reconstruct] Deployed scene bundle directly to {viewer_scene_dir}")
-        else:
-            print("\n=== reconstruction/pipeline/build_scene.py ===")
-            print("[reconstruct] would run: build_scene.py " + " ".join(scene_args))
-            print("[reconstruct] (no COLMAP model yet - run the colmap stage first)")
+    try:
+        if "frames" in stages_to_run:
+            _spawn_stage_py(
+                "reconstruction/preprocessing/extract_frames.py",
+                ["--video", args.video, "--out", frames_path, "--config", args.config],
+                args.run
+            )
 
-    print("\n[reconstruct] done"
-          + ("" if args.run else "  (dry-run - pass --run to execute the tool stages)"))
+        if "colmap" in stages_to_run:
+            _spawn_stage_py(
+                "reconstruction/pipeline/run_colmap.py",
+                ["--frames", frames_path, "--out", proc_dir, "--config", args.config],
+                args.run
+            )
+
+        if "train" in stages_to_run:
+            _spawn_stage_py(
+                "reconstruction/pipeline/train_splat.py",
+                ["--dataset", proc_dir, "--out", train_path, "--config", args.config],
+                args.run
+            )
+
+        if "scene" in stages_to_run:
+            builder_params = ["--model", model_path, "--out", scene_bundle, "--config", args.config]
+            if (active_splat := _discover_trained_splat(train_path)):
+                builder_params.extend(["--splat", active_splat])
+            
+            can_build = args.run or os.path.exists(os.path.join(model_path, "images.txt"))
+            if can_build:
+                _spawn_stage_py(
+                    "reconstruction/pipeline/build_scene.py",
+                    builder_params,
+                    args.run,
+                    append_run_flag=False
+                )
+                
+                # Auto-sync bundle directly to viewer public asset directory
+                public_viewer_dir = os.path.join(PROJECT_ROOT, "viewer", "public", "scenes", args.scene_id)
+                os.makedirs(public_viewer_dir, exist_ok=True)
+                for item_name in os.listdir(scene_bundle):
+                    src_elem = os.path.join(scene_bundle, item_name)
+                    dst_elem = os.path.join(public_viewer_dir, item_name)
+                    if os.path.isdir(src_elem):
+                        shutil.copytree(src_elem, dst_elem, dirs_exist_ok=True)
+                    else:
+                        shutil.copy2(src_elem, dst_elem)
+                print(f"[reconstruct] digital twin deployed to {public_viewer_dir}")
+
+    except OrchestrationError as exc:
+        print(f"[reconstruct:err] {exc}", file=sys.stderr)
+        return 1
+
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

@@ -1,4 +1,3 @@
-"""Brush training runner for custom-video-v2 with exact user parameters."""
 import os
 import sys
 import subprocess
@@ -30,7 +29,7 @@ def main():
     os.makedirs(TRAIN_DIR, exist_ok=True)
     print("[train_v2] Running Brush 3DGS training with balanced hyperparameters:")
     print(" ".join(cmd))
-    
+
     retries = 8
     trained = False
     for attempt in range(1, retries + 1):
@@ -49,7 +48,6 @@ def main():
         print("[train_v2] All training attempts failed!", file=sys.stderr)
         return 1
 
-    # Stage 2: Light floater cleaning (std-ratio 0 disables aggressive SOR so walls/surfaces aren't pruned)
     clean_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clean_splat.py")
     if os.path.exists(clean_script):
         print("[train_v2] Running light floater cleaning (preserving walls & surfaces)...")
@@ -70,7 +68,6 @@ def main():
     else:
         shutil.copy(TARGET_PLY, CLEAN_PLY)
 
-    # Stage 3: Convert to ksplat with minimumAlpha 15 and SH=1
     convert_script = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "viewer", "convert-ksplat.mjs")
     print(f"[train_v2] Converting to ksplat (compression=1, shDegree=1, minAlpha=15)...")
     conv_cmd = ["node", convert_script, CLEAN_PLY, TARGET_KSPLAT, "1", "1", "15"]
@@ -79,7 +76,6 @@ def main():
         print("[train_v2] ksplat conversion failed!", file=sys.stderr)
         return 2
 
-    # Stage 4: Deploy to viewer/public and output
     for dest in [PUBLIC_SPLAT, OUTPUT_SPLAT]:
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         shutil.copy2(TARGET_KSPLAT, dest)

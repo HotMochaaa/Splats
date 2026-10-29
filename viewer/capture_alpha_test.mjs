@@ -23,7 +23,6 @@ async function captureAlpha(sceneId, outFile) {
     return el && el.textContent.includes('count');
   }, { timeout: 35000 });
 
-  // Rotate camera slightly upward to view upper walls/ceiling
   const canvas = await page.$('canvas');
   const box = await canvas.boundingBox();
   if (box) {

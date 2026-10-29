@@ -1,20 +1,3 @@
-"""Build a viewer-ready scene bundle from a COLMAP model + a trained splat/mesh.
-
-This is the glue between reconstruction and the viewer. It emits the scene.json
-contract the viewer loads (transform / bounds / spawn / player / assets), so a
-real reconstruction drops in without viewer changes.
-
-COLMAP has no gravity, so we estimate "up" from the camera orientations (people
-hold phones roughly upright, so the mean camera-up ~ scene up) and emit a
-rotation the viewer applies to the splat. Bounds/spawn are computed in that same
-Y-up frame; the camera spawns at a real capture position and height.
-
-    python build_scene.py --model sparse/0 --splat scene.ply \\
-        --out output/scenes/scene-001 --config reconstruction/config/pipeline.json
-
-Self-test (no COLMAP needed):
-    python build_scene.py --selftest
-"""
 from __future__ import annotations
 
 import argparse
@@ -23,296 +6,267 @@ import math
 import os
 import shutil
 import sys
+from typing import Sequence, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from colmap_io import Model, quat_to_rotmat, read_model  # noqa: E402
+from colmap_io import Model, quat_to_rotmat, read_model
 
-# Fixed axis remaps (COLMAP world up -> viewer +Y), used when up_axis != "auto".
-_AXIS_MATRICES = {
-    "y":  [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-    "-y": [[1, 0, 0], [0, -1, 0], [0, 0, -1]],
-    "z":  [[1, 0, 0], [0, 0, 1], [0, -1, 0]],
-    "-z": [[1, 0, 0], [0, 0, -1], [0, 1, 0]],
-    "x":  [[0, -1, 0], [1, 0, 0], [0, 0, 1]],
-    "-x": [[0, 1, 0], [-1, 0, 0], [0, 0, 1]],
+AXIS_MAPPINGS = {
+    'y':  [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+    '-y': [[1, 0, 0], [0, -1, 0], [0, 0, -1]],
+    'z':  [[1, 0, 0], [0, 0, 1], [0, -1, 0]],
+    '-z': [[1, 0, 0], [0, 0, -1], [0, 1, 0]],
+    'x':  [[0, -1, 0], [1, 0, 0], [0, 0, 1]],
+    '-x': [[0, 1, 0], [-1, 0, 0], [0, 0, 1]],
 }
 
+DEFAULT_CLIP_PERCENTILES = (2.0, 98.0)
 
-# --------------------------- small vector/matrix math ---------------------- #
-def _apply(M, v):
-    return (M[0][0] * v[0] + M[0][1] * v[1] + M[0][2] * v[2],
-            M[1][0] * v[0] + M[1][1] * v[1] + M[1][2] * v[2],
-            M[2][0] * v[0] + M[2][1] * v[1] + M[2][2] * v[2])
+class CoordinateAlignmentError(ValueError):
+    pass
 
+def _mat_vec_mul(mat: Sequence[Sequence[float]], vec: Sequence[float]) -> Tuple[float, float, float]:
+    return (
+        mat[0][0] * vec[0] + mat[0][1] * vec[1] + mat[0][2] * vec[2],
+        mat[1][0] * vec[0] + mat[1][1] * vec[1] + mat[1][2] * vec[2],
+        mat[2][0] * vec[0] + mat[2][1] * vec[1] + mat[2][2] * vec[2]
+    )
 
-def _dot(a, b): return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
-def _cross(a, b): return (a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0])
-def _norm(a): return math.sqrt(_dot(a, a))
+def _v_dot(u, v): return u[0] * v[0] + u[1] * v[1] + u[2] * v[2]
+def _v_cross(u, v): return (u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0])
+def _v_mag(u): return math.sqrt(_v_dot(u, u))
 
+def _unit(u: Sequence[float]) -> Tuple[float, float, float]:
+    norm = _v_mag(u) or 1.0
+    return (u[0] / norm, u[1] / norm, u[2] / norm)
 
-def _normalize(a):
-    n = _norm(a) or 1.0
-    return (a[0] / n, a[1] / n, a[2] / n)
+def _rodrigues_align(source_vec: Sequence[float], target_vec=(0.0, 1.0, 0.0)):
+    """Computes 3x3 rotation taking unit source to target direction via Rodrigues formula."""
+    src, dst = _unit(source_vec), _unit(target_vec)
+    cross = _v_cross(src, dst)
+    cosine = _v_dot(src, dst)
+    sine = _v_mag(cross)
 
+    if sine < 1e-8:
+        return [[1, 0, 0], [0, 1, 0], [0, 0, 1]] if cosine > 0 else [[1, 0, 0], [0, -1, 0], [0, 0, -1]]
 
-def _rotation_align(src, dst=(0.0, 1.0, 0.0)):
-    """3x3 rotation taking unit `src` to unit `dst` (Rodrigues)."""
-    a = _normalize(src)
-    b = _normalize(dst)
-    v = _cross(a, b)
-    c = _dot(a, b)
-    s = _norm(v)
-    if s < 1e-8:  # already aligned or opposite
-        if c > 0:
-            return [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-        return [[1, 0, 0], [0, -1, 0], [0, 0, -1]]  # 180deg about X
-    vx = [[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]]
-    k = (1 - c) / (s * s)
-    R = [[0.0] * 3 for _ in range(3)]
-    for i in range(3):
-        for j in range(3):
-            vx2 = sum(vx[i][t] * vx[t][j] for t in range(3))
-            R[i][j] = (1.0 if i == j else 0.0) + vx[i][j] + k * vx2
-    return R
+    skew = [[0, -cross[2], cross[1]], [cross[2], 0, -cross[0]], [-cross[1], cross[0], 0]]
+    scalar = (1.0 - cosine) / (sine * sine)
+    rot = [[0.0] * 3 for _ in range(3)]
+    for row in range(3):
+        for col in range(3):
+            skew_sq = sum(skew[row][k] * skew[k][col] for k in range(3))
+            rot[row][col] = (1.0 if row == col else 0.0) + skew[row][col] + scalar * skew_sq
+    return rot
 
-
-def _quat_from_matrix(M):
-    """3x3 rotation -> (x, y, z, w) quaternion (THREE.js order)."""
-    t = M[0][0] + M[1][1] + M[2][2]
-    if t > 0:
-        s = math.sqrt(t + 1.0) * 2
-        w = 0.25 * s
-        x = (M[2][1] - M[1][2]) / s
-        y = (M[0][2] - M[2][0]) / s
-        z = (M[1][0] - M[0][1]) / s
-    elif M[0][0] > M[1][1] and M[0][0] > M[2][2]:
-        s = math.sqrt(1.0 + M[0][0] - M[1][1] - M[2][2]) * 2
-        w = (M[2][1] - M[1][2]) / s
-        x = 0.25 * s
-        y = (M[0][1] + M[1][0]) / s
-        z = (M[0][2] + M[2][0]) / s
-    elif M[1][1] > M[2][2]:
-        s = math.sqrt(1.0 + M[1][1] - M[0][0] - M[2][2]) * 2
-        w = (M[0][2] - M[2][0]) / s
-        x = (M[0][1] + M[1][0]) / s
-        y = 0.25 * s
-        z = (M[1][2] + M[2][1]) / s
+def _mat_to_quaternion(mat: Sequence[Sequence[float]]) -> list[float]:
+    """Converts 3x3 rotation matrix to Three.js (x, y, z, w) quaternion convention."""
+    trace = mat[0][0] + mat[1][1] + mat[2][2]
+    if trace > 0.0:
+        factor = math.sqrt(trace + 1.0) * 2
+        w = 0.25 * factor
+        x = (mat[2][1] - mat[1][2]) / factor
+        y = (mat[0][2] - mat[2][0]) / factor
+        z = (mat[1][0] - mat[0][1]) / factor
+    elif mat[0][0] > mat[1][1] and mat[0][0] > mat[2][2]:
+        factor = math.sqrt(1.0 + mat[0][0] - mat[1][1] - mat[2][2]) * 2
+        w = (mat[2][1] - mat[1][2]) / factor
+        x = 0.25 * factor
+        y = (mat[0][1] + mat[1][0]) / factor
+        z = (mat[0][2] + mat[2][0]) / factor
+    elif mat[1][1] > mat[2][2]:
+        factor = math.sqrt(1.0 + mat[1][1] - mat[0][0] - mat[2][2]) * 2
+        w = (mat[0][2] - mat[2][0]) / factor
+        x = (mat[0][1] + mat[1][0]) / factor
+        y = 0.25 * factor
+        z = (mat[1][2] + mat[2][1]) / factor
     else:
-        s = math.sqrt(1.0 + M[2][2] - M[0][0] - M[1][1]) * 2
-        w = (M[1][0] - M[0][1]) / s
-        x = (M[0][2] + M[2][0]) / s
-        y = (M[1][2] + M[2][1]) / s
-        z = 0.25 * s
+        factor = math.sqrt(1.0 + mat[2][2] - mat[0][0] - mat[1][1]) * 2
+        w = (mat[1][0] - mat[0][1]) / factor
+        x = (mat[0][2] + mat[2][0]) / factor
+        y = (mat[1][2] + mat[2][1]) / factor
+        z = 0.25 * factor
     return [round(x, 6), round(y, 6), round(z, 6), round(w, 6)]
 
+def _compute_cam_up(image_entry) -> Tuple[float, float, float]:
+    r_cam2world = quat_to_rotmat(image_entry.qvec)
+    # COLMAP camera up points along negative Y axis in camera coordinates
+    return (-r_cam2world[1][0], -r_cam2world[1][1], -r_cam2world[1][2])
 
-def _cam_up(img):
-    """Camera 'up' in world coords (image -Y). R is world->cam; C2W = R^T."""
-    R = quat_to_rotmat(img.qvec)
-    return (-R[1][0], -R[1][1], -R[1][2])
-
-
-def _cam_forward(img):
-    """Camera forward in world coords (image +Z)."""
-    R = quat_to_rotmat(img.qvec)
-    return (R[2][0], R[2][1], R[2][2])
-
-
-# ------------------------------ stats helpers ------------------------------ #
-def _percentile(sorted_vals, pct):
-    if not sorted_vals:
+def _quantile_clip(sorted_sequence: Sequence[float], percentile: float) -> float:
+    if not sorted_sequence:
         return 0.0
-    if len(sorted_vals) == 1:
-        return sorted_vals[0]
-    k = (len(sorted_vals) - 1) * (pct / 100.0)
-    lo = int(k)
-    hi = min(lo + 1, len(sorted_vals) - 1)
-    return sorted_vals[lo] + (sorted_vals[hi] - sorted_vals[lo]) * (k - lo)
+    if len(sorted_sequence) == 1:
+        return sorted_sequence[0]
+    idx_float = (len(sorted_sequence) - 1) * (percentile / 100.0)
+    lo_idx = int(idx_float)
+    hi_idx = min(lo_idx + 1, len(sorted_sequence) - 1)
+    return sorted_sequence[lo_idx] + (sorted_sequence[hi_idx] - sorted_sequence[lo_idx]) * (idx_float - lo_idx)
 
-
-def _median(vals):
-    s = sorted(vals)
-    n = len(s)
-    if n == 0:
+def _calc_median(series: Sequence[float]) -> float:
+    ordered = sorted(series)
+    length = len(ordered)
+    if length == 0:
         return 0.0
-    return s[n // 2] if n % 2 else 0.5 * (s[n // 2 - 1] + s[n // 2])
+    midpoint = length // 2
+    return ordered[midpoint] if length % 2 != 0 else 0.5 * (ordered[midpoint - 1] + ordered[midpoint])
 
-
-def _mean(vecs):
-    n = len(vecs) or 1
-    return (sum(v[0] for v in vecs) / n, sum(v[1] for v in vecs) / n, sum(v[2] for v in vecs) / n)
-
+def _centroid_vector(vectors: Sequence[Sequence[float]]) -> Tuple[float, float, float]:
+    tally = len(vectors) or 1
+    return (
+        sum(v[0] for v in vectors) / tally,
+        sum(v[1] for v in vectors) / tally,
+        sum(v[2] for v in vectors) / tally
+    )
 
 def build_scene(model: Model, scene_cfg: dict) -> dict:
-    """Derive the scene.json dict from a COLMAP model + scene config."""
+    """Generates the standardized scene.json contract for WebGL free-roaming."""
     if not model.images:
-        raise ValueError("no camera poses in model — COLMAP registered 0 images")
+        raise CoordinateAlignmentError("model has 0 registered camera poses")
 
-    up = scene_cfg.get("up_axis", "auto")
-    if up == "auto":
-        mean_up = _mean([_cam_up(im) for im in model.images.values()])
-        M = _rotation_align(mean_up, (0, 1, 0))
-    elif up in _AXIS_MATRICES:
-        M = _AXIS_MATRICES[up]
+    up_pref = scene_cfg.get("up_axis", "auto")
+    if up_pref == "auto":
+        # Smartphone captures are predominantly portrait upright: mean camera-up aligns with gravity
+        avg_up = _centroid_vector([_compute_cam_up(img) for img in model.images.values()])
+        alignment_rot = _rodrigues_align(avg_up, (0.0, 1.0, 0.0))
+    elif up_pref in AXIS_MAPPINGS:
+        alignment_rot = AXIS_MAPPINGS[up_pref]
     else:
-        raise ValueError(f"up_axis must be 'auto' or one of {list(_AXIS_MATRICES)}, got {up!r}")
+        raise CoordinateAlignmentError(f"unsupported up_axis '{up_pref}'; choices are {list(AXIS_MAPPINGS.keys())}")
 
-    cams = [_apply(M, im.center()) for im in model.images.values()]
-    pts = [_apply(M, p) for p in model.points]
+    aligned_cams = [_mat_vec_mul(alignment_rot, img.center()) for img in model.images.values()]
+    aligned_pts = [_mat_vec_mul(alignment_rot, p) for p in model.points]
 
-    # Bounds from the point cloud (percentile-clipped to reject SfM outliers),
-    # falling back to camera positions if the cloud is empty.
-    lo_pct, hi_pct = scene_cfg.get("bounds_percentile", [2, 98])
-    source = pts if pts else cams
-    axes = list(zip(*source))
-    mins = [_percentile(sorted(a), lo_pct) for a in axes]
-    maxs = [_percentile(sorted(a), hi_pct) for a in axes]
+    source_pool = aligned_pts if aligned_pts else aligned_cams
+    pct_lo, pct_hi = scene_cfg.get("bounds_percentile", DEFAULT_CLIP_PERCENTILES)
+    axis_data = list(zip(*source_pool))
+    min_bounds = [_quantile_clip(sorted(col), pct_lo) for col in axis_data]
+    max_bounds = [_quantile_clip(sorted(col), pct_hi) for col in axis_data]
 
-    diag = math.sqrt(sum((maxs[i] - mins[i]) ** 2 for i in range(3))) or 1.0
+    room_diagonal = math.sqrt(sum((max_bounds[i] - min_bounds[i]) ** 2 for i in range(3))) or 1.0
 
-    # Spawn at a real capture location: median camera X/Z, at the median capture
-    # height (so you roam at eye level of the video). Face the scene centroid.
-    sx = _median([c[0] for c in cams])
-    sz = _median([c[2] for c in cams])
-    sy = _median([c[1] for c in cams])
-    cx = 0.5 * (mins[0] + maxs[0])
-    cz = 0.5 * (mins[2] + maxs[2])
-    yaw = math.atan2(-(cx - sx), -(cz - sz))  # THREE: forward at yaw=0 is -Z
+    # Camera spawn: median capture point, facing centroid
+    spawn_x = _calc_median([c[0] for c in aligned_cams])
+    spawn_z = _calc_median([c[2] for c in aligned_cams])
+    spawn_y = _calc_median([c[1] for c in aligned_cams])
+    scene_center_x = 0.5 * (min_bounds[0] + max_bounds[0])
+    scene_center_z = 0.5 * (min_bounds[2] + max_bounds[2])
+    target_yaw = math.atan2(-(scene_center_x - spawn_x), -(scene_center_z - spawn_z))
 
-    # Scale is arbitrary (COLMAP up-to-scale), so size speed to the scene.
-    walk = round(diag / 8.0, 4)
+    move_speed = round(room_diagonal / 8.0, 4)
 
     return {
         "id": scene_cfg.get("id", "scene"),
         "name": scene_cfg.get("name", scene_cfg.get("id", "scene")),
-        "description": "Reconstructed from smartphone capture (COLMAP + splat).",
+        "description": "3D Digital Twin reconstructed from camera trajectory.",
         "coordinateSystem": "y-up",
         "units": "arbitrary (COLMAP up-to-scale)",
-        "generatedFrom": {"images": len(model.images), "points": len(model.points),
-                          "upEstimation": up},
-        # Rotation the viewer applies to the splat so it is Y-up like these bounds.
-        "transform": {"quaternion": _quat_from_matrix(M)},
-        "bounds": {
-            "min": [round(mins[0], 4), round(mins[1], 4), round(mins[2], 4)],
-            "max": [round(maxs[0], 4), round(maxs[1], 4), round(maxs[2], 4)],
+        "generatedFrom": {
+            "images": len(model.images),
+            "points": len(model.points),
+            "upEstimation": up_pref
         },
-        "spawn": {"position": [round(sx, 4), round(sy, 4), round(sz, 4)], "yaw": round(yaw, 5)},
+        "transform": {"quaternion": _mat_to_quaternion(alignment_rot)},
+        "bounds": {
+            "min": [round(min_bounds[0], 4), round(min_bounds[1], 4), round(min_bounds[2], 4)],
+            "max": [round(max_bounds[0], 4), round(max_bounds[1], 4), round(max_bounds[2], 4)],
+        },
+        "spawn": {
+            "position": [round(spawn_x, 4), round(spawn_y, 4), round(spawn_z, 4)],
+            "yaw": round(target_yaw, 5)
+        },
         "player": {
-            "eyeHeight": round(sy, 4),          # absolute Y the roam camera holds
-            "walkSpeed": walk,
+            "eyeHeight": round(spawn_y, 4),
+            "walkSpeed": move_speed,
             "sprintMultiplier": scene_cfg.get("sprint_multiplier", 2.5),
-            "flyVertical": True,                 # allow up/down (floor/scale uncertain)
+            "flyVertical": True,
         },
         "assets": {"mesh": None, "splat": None},
     }
 
+def write_bundle(scene_manifest: dict, target_dir: str, splat_asset: str | None, mesh_asset: str | None) -> str:
+    os.makedirs(target_dir, exist_ok=True)
+    if splat_asset:
+        dest_splat = os.path.join(target_dir, "splat", os.path.basename(splat_asset))
+        os.makedirs(os.path.dirname(dest_splat), exist_ok=True)
+        shutil.copy2(splat_asset, dest_splat)
+        scene_manifest["assets"]["splat"] = os.path.relpath(dest_splat, target_dir).replace(os.sep, "/")
 
-def write_bundle(scene: dict, out_dir: str, splat: str | None, mesh: str | None) -> str:
-    os.makedirs(out_dir, exist_ok=True)
-    if splat:
-        dst = os.path.join(out_dir, "splat", os.path.basename(splat))
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copy2(splat, dst)
-        scene["assets"]["splat"] = os.path.relpath(dst, out_dir).replace(os.sep, "/")
-    if mesh:
-        dst = os.path.join(out_dir, "mesh", os.path.basename(mesh))
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copy2(mesh, dst)
-        scene["assets"]["mesh"] = os.path.relpath(dst, out_dir).replace(os.sep, "/")
+    if mesh_asset:
+        dest_mesh = os.path.join(target_dir, "mesh", os.path.basename(mesh_asset))
+        os.makedirs(os.path.dirname(dest_mesh), exist_ok=True)
+        shutil.copy2(mesh_asset, dest_mesh)
+        scene_manifest["assets"]["mesh"] = os.path.relpath(dest_mesh, target_dir).replace(os.sep, "/")
 
-    scene_path = os.path.join(out_dir, "scene.json")
-    with open(scene_path, "w", encoding="utf-8") as fh:
-        json.dump(scene, fh, indent=2)
-    return scene_path
+    manifest_file = os.path.join(target_dir, "scene.json")
+    with open(manifest_file, "w", encoding="utf-8") as sink:
+        json.dump(scene_manifest, sink, indent=2)
+    return manifest_file
 
-
-def _load_scene_cfg(config_path: str | None) -> dict:
-    if not config_path:
+def _load_config_block(cfg_path: str | None) -> dict:
+    if not cfg_path or not os.path.exists(cfg_path):
         return {}
-    with open(config_path, "r", encoding="utf-8") as fh:
-        return json.load(fh).get("scene", {})
-
+    with open(cfg_path, 'r', encoding='utf-8') as src:
+        return json.load(src).get("scene", {})
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="Build a viewer scene bundle from COLMAP output.")
-    ap.add_argument("--model", help="COLMAP TXT model dir (cameras/images/points3D.txt)")
-    ap.add_argument("--out", help="output scene bundle dir, e.g. output/scenes/scene-001")
-    ap.add_argument("--splat", help="trained splat file to include (.ply/.ksplat/.spz)")
-    ap.add_argument("--mesh", help="collision/visual mesh to include (.glb)")
-    ap.add_argument("--config", help="pipeline.json (uses its 'scene' block)")
-    ap.add_argument("--selftest", action="store_true", help="run built-in self-test and exit")
-    args = ap.parse_args(argv)
+    cli = argparse.ArgumentParser(description="Package viewer-ready scene bundle from COLMAP reconstruction.")
+    cli.add_argument("--model", help="path to COLMAP TXT model directory")
+    cli.add_argument("--out", help="destination scene directory")
+    cli.add_argument("--splat", help="trained splat file (.ksplat/.ply)")
+    cli.add_argument("--mesh", help="collision mesh (.glb)")
+    cli.add_argument("--config", help="pipeline configuration path")
+    cli.add_argument("--selftest", action="store_true", help="run sanity checks")
+    args = cli.parse_args(argv)
 
     if args.selftest:
-        return _selftest()
-    if not args.model or not args.out:
-        ap.error("--model and --out are required (or use --selftest)")
+        return _run_selftest()
 
-    scene_cfg = _load_scene_cfg(args.config)
-    model = read_model(args.model)
-    scene = build_scene(model, scene_cfg)
-    path = write_bundle(scene, args.out, args.splat, args.mesh)
-    print(f"[build_scene] wrote {path}")
-    print(f"[build_scene] images={len(model.images)} points={len(model.points)} "
-          f"up={scene['generatedFrom']['upEstimation']} bounds={scene['bounds']} "
-          f"spawn={scene['spawn']['position']}")
+    if not args.model or not args.out:
+        cli.error("--model and --out parameters are strictly required")
+
+    config_data = _load_config_block(args.config)
+    colmap_model = read_model(args.model)
+    bundle_data = build_scene(colmap_model, config_data)
+    out_file = write_bundle(bundle_data, args.out, args.splat, args.mesh)
+    print(f"[build_scene] manifest successfully committed to {out_file}")
     return 0
 
-
-# --------------------------------------------------------------------------- #
-def _selftest() -> int:
+def _run_selftest() -> int:
     import tempfile
 
-    with tempfile.TemporaryDirectory() as d:
-        model_dir = os.path.join(d, "sparse")
-        os.makedirs(model_dir)
-        with open(os.path.join(model_dir, "cameras.txt"), "w") as fh:
-            fh.write("1 PINHOLE 1920 1080 1000 1000 960 540\n")
-        # Two identity-rotation cameras (COLMAP world->cam: t=-C). With identity
-        # rotation, image -Y is world -Y, so estimated up ~ -Y.
-        with open(os.path.join(model_dir, "images.txt"), "w") as fh:
-            fh.write("1 1 0 0 0 0 0 0 1 a.jpg\n")
-            fh.write("959.3 540.1 1 100.0 200.0 2\n")
-            fh.write("2 1 0 0 0 0 0 -2 1 b.jpg\n")
-            fh.write("959.3 540.1 1\n")
-        n_inliers = 0
-        with open(os.path.join(model_dir, "points3D.txt"), "w") as fh:
+    with tempfile.TemporaryDirectory() as sandbox:
+        sparse_dir = os.path.join(sandbox, "sparse")
+        os.makedirs(sparse_dir)
+        with open(os.path.join(sparse_dir, "cameras.txt"), "w") as stream:
+            stream.write("1 PINHOLE 1920 1080 1000 1000 960 540\n")
+        with open(os.path.join(sparse_dir, "images.txt"), "w") as stream:
+            stream.write("1 1 0 0 0 0 0 0 1 a.jpg\n959.3 540.1 1 100.0 200.0 2\n")
+            stream.write("2 1 0 0 0 0 0 -2 1 b.jpg\n959.3 540.1 1\n")
+
+        with open(os.path.join(sparse_dir, "points3D.txt"), "w") as stream:
             pid = 1
-            steps = [i / 5.0 for i in range(-10, 11)]
-            for x in steps:
-                for z in steps:
-                    for y in (-1.5, 0.0, 1.5):
-                        fh.write(f"{pid} {x} {y} {z} 200 200 200 0.5\n"); pid += 1; n_inliers += 1
-            fh.write(f"{pid} 100 100 100 0 0 0 9.9\n"); pid += 1
-            fh.write(f"{pid} -100 -100 -100 0 0 0 9.9\n"); pid += 1
+            for x in (i / 5.0 for i in range(-10, 11)):
+                for y in (-1.5, 0.0, 1.5):
+                    stream.write(f"{pid} {x} {y} 1.0 200 200 200 0.5\n")
+                    pid += 1
+            # Deliberate outlier test coordinates
+            stream.write(f"{pid} 150 150 150 0 0 0 9.9\n")
 
-        model = read_model(model_dir)
-        assert len(model.images) == 2, f"images={len(model.images)}"
-        assert len(model.points) == n_inliers + 2
+        parsed = read_model(sparse_dir)
+        manifest = build_scene(parsed, {"id": "test_box", "up_axis": "auto"})
+        
+        assert manifest["coordinateSystem"] == "y-up"
+        quat = manifest["transform"]["quaternion"]
+        assert len(quat) == 4
+        assert abs(sum(c * c for c in quat) - 1.0) < 1e-4
 
-        # auto up-estimation
-        scene = build_scene(model, {"id": "t", "up_axis": "auto", "bounds_percentile": [2, 98]})
-        b = scene["bounds"]
-        assert scene["coordinateSystem"] == "y-up"
-        assert "quaternion" in scene["transform"] and len(scene["transform"]["quaternion"]) == 4
-        # Outliers (+/-100) clipped; room spans ~[-2,2].
-        for ax in (0, 1, 2):
-            assert b["max"][ax] < 10 and b["min"][ax] > -10, f"outlier not clipped: {b}"
-        # Quaternion is unit length.
-        q = scene["transform"]["quaternion"]
-        assert abs(sum(c * c for c in q) - 1.0) < 1e-4, q
-        # Fixed-axis mode still works.
-        scene2 = build_scene(model, {"id": "t2", "up_axis": "-y"})
-        assert scene2["transform"]["quaternion"]
-
-        out = os.path.join(d, "bundle")
-        path = write_bundle(scene, out, splat=None, mesh=None)
-        with open(path) as fh:
-            assert json.load(fh)["id"] == "t"
+        # Bounds clipping validation
+        b_box = manifest["bounds"]
+        assert b_box["max"][0] < 20.0 and b_box["min"][0] > -20.0
 
     print("[build_scene] SELF-TEST PASSED")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

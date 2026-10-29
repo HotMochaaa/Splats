@@ -1,6 +1,3 @@
-// Convert a Gaussian-splat .ply to mkkellogg's compressed .ksplat for fast web
-// loading.  Usage: node convert-ksplat.mjs <in.ply> <out.ksplat> [compression 0|1|2] [shDeg]
-// mkkellogg touches a few browser globals during parsing; stub them for Node.
 globalThis.window = globalThis;
 globalThis.self = globalThis;
 globalThis.document = globalThis.document || { createElement: () => ({}), createElementNS: () => ({}) };

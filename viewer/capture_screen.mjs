@@ -19,13 +19,11 @@ async function captureScene(sceneId, outFile) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   await page.goto(`http://localhost:5173/?scene=${sceneId}`, { waitUntil: 'load' });
 
-  // Wait for splat count to appear in HUD
   await page.waitForFunction(() => {
     const el = document.getElementById('hud-splat');
     return el && el.textContent.includes('count');
   }, { timeout: 35000 });
 
-  // Wait 4 seconds for full render and FPS stabilization
   await new Promise(r => setTimeout(r, 4000));
 
   const hudText = await page.evaluate(() => {

@@ -22,12 +22,10 @@ await page.waitForFunction(() => {
   return el && el.textContent.includes('count');
 }, { timeout: 35000 });
 
-// Toggle magenta background
 await page.evaluate(() => {
   window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyB' }));
 });
 
-// Drag to look straight up at ceiling
 const canvas = await page.$('canvas');
 const box = await canvas.boundingBox();
 if (box) {
