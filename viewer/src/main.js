@@ -20,7 +20,7 @@ const _cwarn = console.warn.bind(console);
 console.warn = (...a) => { logErr('warn', a.map(String).join(' ')); _cwarn(...a); };
 
 const urlParams = new URLSearchParams(window.location.search);
-const activeScene = urlParams.get('scene') || 'custom-video-v3D';
+const activeScene = urlParams.get('scene') || 'custom-video-v4';
 const SCENE_URL = activeScene.endsWith('.json') ? `/scenes/${activeScene}` : `/scenes/${activeScene}/scene.json`;
 
 const appEl = document.getElementById('app');
@@ -100,6 +100,7 @@ async function init() {
   fpControls = new FirstPersonControls(camera, renderer.domElement, config);
   scene.add(fpControls.object);
 
+  const btnV4 = document.getElementById('btn-v4');
   const btnV3dSuperclean = document.getElementById('btn-v3d-superclean');
   const btnPlaycanvas = document.getElementById('btn-playcanvas');
   const btnV3bFix = document.getElementById('btn-v3b-fix');
@@ -181,8 +182,9 @@ async function init() {
   hudScene.textContent = `scene: ${config.name ?? config.id ?? 'scene'}`;
 
   const engineParam = urlParams.get('engine');
-  [btnV3dSuperclean, btnPlaycanvas, btnV3bFix, btnV3bInpaint, btnV3bTight, btnV3b, btnV3c, btnV2, btnV1].forEach(b => b?.classList.remove('active'));
+  [btnV4, btnV3dSuperclean, btnPlaycanvas, btnV3bFix, btnV3bInpaint, btnV3bTight, btnV3b, btnV3c, btnV2, btnV1].forEach(b => b?.classList.remove('active'));
   if (engineParam === 'playcanvas') btnPlaycanvas?.classList.add('active');
+  else if (activeScene === 'custom-video-v4') btnV4?.classList.add('active');
   else if (activeScene === 'custom-video-v3D') btnV3dSuperclean?.classList.add('active');
   else if (activeScene === 'custom-video-v3B-fix1') btnV3bFix?.classList.add('active');
   else if (activeScene === 'custom-video-v3B-inpaint') btnV3bInpaint?.classList.add('active');
@@ -193,6 +195,7 @@ async function init() {
   else if (activeScene === 'custom-video') btnV1?.classList.add('active');
 
   btnPlaycanvas?.addEventListener('click', () => { window.location.search = '?engine=playcanvas&scene=custom-video-v3D'; });
+  btnV4?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v4'; });
   btnV3dSuperclean?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3D'; });
   btnV3bFix?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B-fix1'; });
   btnV3bInpaint?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B-inpaint'; });

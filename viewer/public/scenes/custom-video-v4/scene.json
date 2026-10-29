@@ -1,0 +1,54 @@
+{
+  "id": "custom-video-v4",
+  "name": "Custom Video v4 (4K 120FPS Dataset)",
+  "description": "Reconstructed from high-speed 4K walkthrough (IMG_3780.MOV)",
+  "coordinateSystem": "y-up",
+  "units": "arbitrary (COLMAP up-to-scale)",
+  "generatedFrom": {
+    "images": 273,
+    "points": 91913,
+    "upEstimation": "auto"
+  },
+  "transform": {
+    "quaternion": [
+      0.924713,
+      0.0,
+      -0.067651,
+      0.374607
+    ]
+  },
+  "bounds": {
+    "min": [
+      -2.81,
+      -5.1326,
+      -5.2515
+    ],
+    "max": [
+      4.2015,
+      4.0049,
+      7.2713
+    ]
+  },
+  "spawn": {
+    "position": [
+      0.0508,
+      -0.1664,
+      1.7206
+    ],
+    "yaw": -0.73694
+  },
+  "player": {
+    "eyeHeight": -0.1664,
+    "walkSpeed": 2.1267,
+    "sprintMultiplier": 2.2,
+    "flyVertical": true
+  },
+  "assets": {
+    "mesh": null,
+    "splat": "splat/scene.ksplat"
+  },
+  "renderOptions": {
+    "splatAlphaRemovalThreshold": 15,
+    "gpuAcceleratedSort": false
+  }
+}
