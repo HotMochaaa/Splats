@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NammaSpace — Round 1 Viewer</title>
+    <title>NammaSpace — 3D Gaussian Splat Viewer</title>
     <style>:root { color-scheme: dark; }
       * { margin: 0; box-sizing: border-box; }
       html, body { height: 100%; overflow: hidden; background: #0b0d10; font-family: system-ui, sans-serif; }
@@ -61,25 +61,12 @@
     <div id="app"></div>
     <div id="crosshair"></div>
     <div id="toolbar">
-      <div style="display:flex;gap:4px;background:#141920;padding:2px;border-radius:8px;border:1px solid #333e4d;margin-right:6px;">
-        <button id="btn-v4" class="btn active" style="color:#38bdf8;font-weight:700;background:#0369a1;border-color:#38bdf8;" title="New 4K 120FPS High-Res Dataset (IMG_3780.MOV)">🚀 v4 (4K 120FPS)</button>
-        <button id="btn-v3d-superclean" class="btn" style="color:#e0e7ff;font-weight:600;background:#312e81;border-color:#6366f1;" title="Dedicated High-Clarity Model: Aggressive scale regularization penalty (5e-8), floaters eradicated, SH=2">✨ v3D SuperClean</button>
-        <button id="btn-playcanvas" class="btn" style="color:#f43f5e;font-weight:600;background:#881337;border-color:#f43f5e;" title="PlayCanvas Engine Mode with Streamed SOG and Recast Navigation">🎮 PlayCanvas Engine</button>
-        <button id="btn-v3b-tight" class="btn" style="color:#38bdf8;font-weight:600;" title="Default: 3DGS Retrain with Scale Loss Penalty (2.5x scale penalty, 20k steps)">📐 v3B Tight Scale</button>
-        <button id="btn-v3b-fix" class="btn" style="color:#4ade80;font-weight:600;" title="Option A: Needle-filtered, SH Clamped">✨ v3B (Clean Fix)</button>
-        <button id="btn-v3b-inpaint" class="btn" style="color:#f59e0b;font-weight:600;" title="Option D: Inpaint ceiling cap sampled from real neighbors">🎨 v3B (Inpaint D)</button>
-        <button id="btn-v3b" class="btn" style="color:#94a3b8;font-weight:500;" title="Version 3B: 1080p, SH=2, 30k steps (Balanced 1M)">🔥 v3B</button>
-        <button id="btn-v3c" class="btn" style="color:#a855f7;font-weight:600;" title="Version 3C: 1080p, SH=2, 30k steps (Dense 1.5M)">⚡ v3C</button>
-        <button id="btn-v2" class="btn" title="Version 2: 1080p, SH=1, 30k steps">✨ v2</button>
-        <button id="btn-v1" class="btn" title="Version 1: 576p, SH=0, 15k steps">📦 v1</button>
-      </div>
+      <button id="btn-v3d-superclean" class="btn active" style="color:#e0e7ff;font-weight:600;background:#312e81;border-color:#6366f1;" title="Dedicated High-Clarity Model: Aggressive scale regularization penalty (5e-8), floaters eradicated, SH=2">✨ v3D SuperClean</button>
       <button id="btn-orbit" class="btn active">🔄 Orbit &amp; Zoom</button>
       <button id="btn-walk" class="btn">🚶 Walk (WASD)</button>
       <button id="btn-angle-limit" class="btn" title="Toggle soft look-up angle limit">🔭 Angle Limit: Off</button>
       <button id="btn-bg-toggle" class="btn" title="Toggle between Room Tone, Dark, and Magenta (Key B)">🎨 BG Mode</button>
       <button id="btn-reset" class="btn">🎯 Center</button>
-      <button id="btn-bed" class="btn">🛏️ Bed</button>
-      <button id="btn-desk" class="btn">🪑 Desk</button>
     </div>
     <div id="hud">
       <div><b>NammaSpace</b> — 3D Gaussian Splat Viewer</div>
@@ -97,7 +84,6 @@
         <kbd>R</kbd> reset camera &nbsp;·&nbsp; <kbd>Esc</kbd> release mouse
       </div>
     </div>
-    <script type="module" src="/src/main.js">
-</script>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

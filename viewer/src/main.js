@@ -20,7 +20,7 @@ const _cwarn = console.warn.bind(console);
 console.warn = (...a) => { logErr('warn', a.map(String).join(' ')); _cwarn(...a); };
 
 const urlParams = new URLSearchParams(window.location.search);
-const activeScene = urlParams.get('scene') || 'custom-video-v4';
+const activeScene = urlParams.get('scene') || 'custom-video-v3D';
 const SCENE_URL = activeScene.endsWith('.json') ? `/scenes/${activeScene}` : `/scenes/${activeScene}/scene.json`;
 
 const appEl = document.getElementById('app');
@@ -77,13 +77,6 @@ async function init() {
     ? `splat: ${debug.splatError ? 'ERR ' + debug.splatError : 'count ' + debug.splatCount}`
     : 'splat: (none)';
 
-  const bounds = config.bounds || { min: [-3, -3, -4], max: [3, 2, 4] };
-  const targetCenter = new THREE.Vector3(
-    0.5 * (bounds.min[0] + bounds.max[0]),
-    0.5 * (bounds.min[1] + bounds.max[1]),
-    0.5 * (bounds.min[2] + bounds.max[2])
-  );
-
   orbitControls = new OrbitControls(camera, renderer.domElement);
   orbitControls.enableDamping = true;
   orbitControls.dampingFactor = 0.05;
@@ -100,23 +93,12 @@ async function init() {
   fpControls = new FirstPersonControls(camera, renderer.domElement, config);
   scene.add(fpControls.object);
 
-  const btnV4 = document.getElementById('btn-v4');
   const btnV3dSuperclean = document.getElementById('btn-v3d-superclean');
-  const btnPlaycanvas = document.getElementById('btn-playcanvas');
-  const btnV3bFix = document.getElementById('btn-v3b-fix');
-  const btnV3bInpaint = document.getElementById('btn-v3b-inpaint');
-  const btnV3bTight = document.getElementById('btn-v3b-tight');
-  const btnV3b = document.getElementById('btn-v3b');
-  const btnV3c = document.getElementById('btn-v3c');
-  const btnV2 = document.getElementById('btn-v2');
-  const btnV1 = document.getElementById('btn-v1');
   const btnOrbit = document.getElementById('btn-orbit');
   const btnWalk = document.getElementById('btn-walk');
   const btnAngleLimit = document.getElementById('btn-angle-limit');
   const btnBgToggle = document.getElementById('btn-bg-toggle');
   const btnReset = document.getElementById('btn-reset');
-  const btnBed = document.getElementById('btn-bed');
-  const btnDesk = document.getElementById('btn-desk');
 
   function setMode(mode) {
     activeMode = mode;
@@ -164,19 +146,8 @@ async function init() {
 
   function resetToCenter() {
     setMode('orbit');
-    if (activeScene.startsWith('custom-video-v3')) {
-      camera.position.set(0.25, 0.2, 0.85);
-      orbitControls.target.set(0.25, -0.2, -0.4);
-    } else if (activeScene === 'custom-video-v4') {
-      camera.position.set(0.22, 0.15, 0.5);
-      orbitControls.target.set(-1.5, -1.2, -1.2);
-    } else if (activeScene === 'custom-video-v2') {
-      camera.position.set(0.91, 0.06, -0.42);
-      orbitControls.target.set(1.84, 0.06, 0.34);
-    } else {
-      camera.position.set(targetCenter.x, targetCenter.y + 0.6, targetCenter.z - 2.8);
-      orbitControls.target.copy(targetCenter);
-    }
+    camera.position.set(0.25, 0.2, 0.85);
+    orbitControls.target.set(0.25, -0.2, -0.4);
     orbitControls.update();
   }
 
@@ -184,64 +155,14 @@ async function init() {
 
   hudScene.textContent = `scene: ${config.name ?? config.id ?? 'scene'}`;
 
-  const engineParam = urlParams.get('engine');
-  [btnV4, btnV3dSuperclean, btnPlaycanvas, btnV3bFix, btnV3bInpaint, btnV3bTight, btnV3b, btnV3c, btnV2, btnV1].forEach(b => b?.classList.remove('active'));
-  if (engineParam === 'playcanvas') btnPlaycanvas?.classList.add('active');
-  else if (activeScene === 'custom-video-v4') btnV4?.classList.add('active');
-  else if (activeScene === 'custom-video-v3D') btnV3dSuperclean?.classList.add('active');
-  else if (activeScene === 'custom-video-v3B-fix1') btnV3bFix?.classList.add('active');
-  else if (activeScene === 'custom-video-v3B-inpaint') btnV3bInpaint?.classList.add('active');
-  else if (activeScene === 'custom-video-v3B-tight') btnV3bTight?.classList.add('active');
-  else if (activeScene === 'custom-video-v3B') btnV3b?.classList.add('active');
-  else if (activeScene === 'custom-video-v3C') btnV3c?.classList.add('active');
-  else if (activeScene === 'custom-video-v2') btnV2?.classList.add('active');
-  else if (activeScene === 'custom-video') btnV1?.classList.add('active');
-
-  btnPlaycanvas?.addEventListener('click', () => { window.location.search = '?engine=playcanvas&scene=custom-video-v3D'; });
-  btnV4?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v4'; });
-  btnV3dSuperclean?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3D'; });
-  btnV3bFix?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B-fix1'; });
-  btnV3bInpaint?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B-inpaint'; });
-  btnV3bTight?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B-tight'; });
-  btnV3b?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3B'; });
-  btnV3c?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v3C'; });
-  btnV2?.addEventListener('click', () => { window.location.search = '?scene=custom-video-v2'; });
-  btnV1?.addEventListener('click', () => { window.location.search = '?scene=custom-video'; });
+  btnV3dSuperclean?.classList.add('active');
+  btnV3dSuperclean?.addEventListener('click', () => {
+    window.location.search = '?scene=custom-video-v3D';
+  });
 
   btnOrbit?.addEventListener('click', () => setMode('orbit'));
   btnWalk?.addEventListener('click', () => setMode('fp'));
-
   btnReset?.addEventListener('click', resetToCenter);
-
-  btnBed?.addEventListener('click', () => {
-    setMode('orbit');
-    if (activeScene.startsWith('custom-video-v3')) {
-      orbitControls.target.set(-0.8, -0.3, 0.2);
-      camera.position.set(0.3, 0.1, 0.8);
-    } else if (activeScene === 'custom-video-v2') {
-      orbitControls.target.set(2.28, -0.01, 0.53);
-      camera.position.set(0.97, 0.12, -0.17);
-    } else {
-      orbitControls.target.set(-1.8, -0.3, 1.2);
-      camera.position.set(-1.8, 0.4, -0.6);
-    }
-    orbitControls.update();
-  });
-
-  btnDesk?.addEventListener('click', () => {
-    setMode('orbit');
-    if (activeScene.startsWith('custom-video-v3')) {
-      orbitControls.target.set(1.2, -0.1, -0.9);
-      camera.position.set(0.2, 0.2, 0.4);
-    } else if (activeScene === 'custom-video-v2') {
-      orbitControls.target.set(1.85, 1.49, -0.89);
-      camera.position.set(2.24, 0.85, -2.19);
-    } else {
-      orbitControls.target.set(0.4, -0.3, 0.9);
-      camera.position.set(0.4, 0.4, -0.8);
-    }
-    orbitControls.update();
-  });
 
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Tab') {
