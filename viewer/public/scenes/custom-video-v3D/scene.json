@@ -1,6 +1,6 @@
 {
   "id": "custom-video-v3D",
-  "name": "NammaSpace Scene v3D (SuperClean PLY)",
+  "name": "TM-3D7DA1DDE3B Scene v3D (SuperClean PLY)",
   "description": "Dedicated High-Clarity Model with SuperClean scale regularization penalty.",
   "coordinateSystem": "y-up",
   "units": "arbitrary (COLMAP up-to-scale)",
