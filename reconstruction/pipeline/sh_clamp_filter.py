@@ -142,3 +142,4 @@ if __name__ == "__main__":
     cams = parse_cameras(cams_file)
     if cams is not None and len(cams) > 0:
         process_ply(in_ply, out_ply, cams)
+

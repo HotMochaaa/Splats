@@ -43,3 +43,4 @@ target/
 # Web-ready compressed splats ARE tracked (small, deploy artifacts); raw .ply/.splat stay ignored
 !viewer/public/scenes/**/*.ksplat
 !viewer/public/scenes/**/scene_superclean.ply
+!viewer/public/scenes/custom-video-v4/splat/scene_clean.ply
