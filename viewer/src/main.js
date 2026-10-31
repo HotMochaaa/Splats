@@ -167,6 +167,9 @@ async function init() {
     if (activeScene.startsWith('custom-video-v3')) {
       camera.position.set(0.25, 0.2, 0.85);
       orbitControls.target.set(0.25, -0.2, -0.4);
+    } else if (activeScene === 'custom-video-v4') {
+      camera.position.set(0.22, 0.15, 0.5);
+      orbitControls.target.set(-1.5, -1.2, -1.2);
     } else if (activeScene === 'custom-video-v2') {
       camera.position.set(0.91, 0.06, -0.42);
       orbitControls.target.set(1.84, 0.06, 0.34);

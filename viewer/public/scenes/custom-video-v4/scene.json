@@ -1,45 +1,45 @@
 {
   "id": "custom-video-v4",
-  "name": "Custom Video v4 (4K 120FPS Dataset)",
-  "description": "Reconstructed from high-speed 4K walkthrough (IMG_3780.MOV)",
+  "name": "Custom Video v4 (4K 120FPS Dataset - Restored)",
+  "description": "Reconstructed from iPhone 17 Pro Max 4K 120FPS walkthrough with SuperClean filtering.",
   "coordinateSystem": "y-up",
   "units": "arbitrary (COLMAP up-to-scale)",
   "generatedFrom": {
-    "images": 273,
-    "points": 91913,
+    "images": 205,
+    "points": 49686,
     "upEstimation": "auto"
   },
   "transform": {
     "quaternion": [
-      0.924713,
+      0.803322,
       0.0,
-      -0.067651,
-      0.374607
+      -0.581356,
+      0.129227
     ]
   },
   "bounds": {
     "min": [
-      -2.81,
-      -5.1326,
-      -5.2515
+      -5.4558,
+      -5.4352,
+      -5.2044
     ],
     "max": [
-      4.2015,
-      4.0049,
-      7.2713
+      4.9608,
+      0.6011,
+      3.1502
     ]
   },
   "spawn": {
     "position": [
-      0.0508,
-      -0.1664,
-      1.7206
+      0.2155,
+      0.072,
+      0.0274
     ],
-    "yaw": -0.73694
+    "yaw": 0.41373
   },
   "player": {
-    "eyeHeight": -0.1664,
-    "walkSpeed": 2.1267,
+    "eyeHeight": 0.072,
+    "walkSpeed": 1.8318,
     "sprintMultiplier": 2.2,
     "flyVertical": true
   },

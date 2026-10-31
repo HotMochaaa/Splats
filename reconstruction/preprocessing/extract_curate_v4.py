@@ -6,7 +6,7 @@ import subprocess
 import cv2
 import numpy as np
 
-def run_pipeline(video_path, base_out_dir, target_fps=2.5, sample_fps=6.0, max_width=1920):
+def run_pipeline(video_path, base_out_dir, target_fps=2.5, sample_fps=6.0, max_width=720):
     raw_dir = os.path.join(base_out_dir, "raw_candidates")
     img_dir = os.path.join(base_out_dir, "images")
     
@@ -14,6 +14,11 @@ def run_pipeline(video_path, base_out_dir, target_fps=2.5, sample_fps=6.0, max_w
     os.makedirs(img_dir, exist_ok=True)
     
     # Clean previous output
+    for f in glob.glob(os.path.join(raw_dir, "*")):
+        try:
+            os.remove(f)
+        except OSError:
+            pass
     for f in glob.glob(os.path.join(img_dir, "*")):
         try:
             os.remove(f)

@@ -91,7 +91,7 @@ def _mat_to_quaternion(mat: Sequence[Sequence[float]]) -> list[float]:
 def _compute_cam_up(image_entry) -> Tuple[float, float, float]:
     r_cam2world = quat_to_rotmat(image_entry.qvec)
     # COLMAP camera up points along negative Y axis in camera coordinates
-    return (-r_cam2world[1][0], -r_cam2world[1][1], -r_cam2world[1][2])
+    return (-r_cam2world[0][1], -r_cam2world[1][1], -r_cam2world[2][1])
 
 def _quantile_clip(sorted_sequence: Sequence[float], percentile: float) -> float:
     if not sorted_sequence:
