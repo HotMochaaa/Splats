@@ -11,5 +11,9 @@
 #   - gsplat (CUDA):       pip install gsplat
 #   - brush (WebGPU, no CUDA): cargo install / prebuilt binary
 #
+# Open3D point-cloud clustering for POI collision boxes:
+numpy
+open3d
+#
 # Web compression (Node, run in viewer/ or standalone):
 #   - npx @playcanvas/splat-transform   (PLY -> SOG/SPZ/KSplat)
