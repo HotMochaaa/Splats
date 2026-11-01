@@ -44,12 +44,12 @@ Open the printed URL, click to enter, and walk around with **WASD + mouse**
 
 - **M0** Repo analysis + scaffold ✅
 - **M1** Minimal desktop free-roam viewer (procedural placeholder scene) ✅
-- **M2** Load a real smartphone-derived reconstruction
-- **M3** Polished first-person roaming (floor follow, bounds, basic collision)
-- **M4** One-command capture → scene pipeline (local COLMAP + 3D Gaussian Splatting)
-- **M5** Performance (compression, LOD, streaming)
-- **M6** Reproducibility on a clean machine
-- **M7** Demo recording
+- **M2** Load a real smartphone-derived reconstruction ✅
+- **M3** Polished first-person roaming (floor follow, bounds, basic collision) ✅
+- **M4** One-command capture → scene pipeline (local COLMAP + 3D Gaussian Splatting) ✅
+- **M5** Performance (compression, LOD, streaming) ✅
+- **M6** Reproducibility on a clean machine ✅
+- **M7** Demo recording ✅
 
 ## Reconstruction direction (M2–M4)
 
