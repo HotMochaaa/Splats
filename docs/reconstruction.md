@@ -34,6 +34,43 @@ automates the whole video → COLMAP-dataset step.
 
 **Collision / floor mesh:** SuGaR or 2D-SuGaR / 2DGS → surface-aligned Poisson mesh.
 
+## POI collision boxes
+
+The viewer uses Open3D to create collision cells only in occupied regions of a
+Gaussian PLY near each POI. The point cloud is rotated by the scene transform
+before matching. Cluster bounds use robust 2nd-to-98th percentile extents,
+shifted to the point-supported cluster center and capped to 72% of the POI
+estimate; this avoids clipping objects whose label center is slightly offset.
+Beds use a continuous, tiled mattress slab instead: nearby bedding clusters
+support its horizontal footprint, the main cluster sets its height, and tiles
+meet without gaps. Its footprint is constrained to 72–82% of the labeled bed
+dimensions so sparse splat points do not create an undersized or overgrown
+collider.
+Small POIs under 0.75 scene units are skipped by default; categories are not
+excluded by default. If a POI has too few nearby points, the generator reports
+and uses a scaled POI-size fallback. These boxes are movement proxies, not
+collision geometry embedded in the splats.
+
+From the repository root, install the reconstruction dependencies, back up the
+scene manifest, then regenerate the default `custom-video-v3D` scene:
+
+```powershell
+python -m pip install -r reconstruction\requirements.txt
+Copy-Item viewer\public\scenes\custom-video-v3D\scene.json "$env:TEMP\scene-v3D-before-collision.json"
+python reconstruction\pipeline\build_collision_boxes.py --point-cloud viewer\public\scenes\custom-video-v3D\splat\scene_superclean.ply --scene viewer\public\scenes\custom-video-v3D\scene.json --poi-labels viewer\public\scenes\custom-video-v3D\poi_labels.json --out viewer\public\scenes\custom-video-v3D\scene.json --max-box-size 0.15 --cluster-eps 0.12 --min-obstacle-size 0.55
+```
+
+The v3D settings create fine 0.15-unit occupied voxels, use a 0.12-unit DBSCAN
+radius, and skip POIs under 0.55 units; observed cluster bounds use 2nd-to-98th
+percentiles and are capped at 72% of estimated POI dimensions (beds use the
+separate footprint fit described above). All 12 larger POIs had nearby point
+support, so this run needed no estimated-size fallbacks.
+`--max-box-size`, `--cluster-eps`, `--min-points`, and
+`--min-obstacle-size` tune voxel size, clustering, density, and size filtering.
+Repeat `--ignore-category <name>` to explicitly skip a category. Add
+the viewer's **Collision Boxes** toolbar button to temporarily show or hide
+the generated boxes; collision blocking remains enabled while they are hidden.
+
 ## Web delivery / compression (M5, but decide format early)
 
 Raw `.ply` is huge (~1 GB / 4M gaussians) — compression is mandatory:

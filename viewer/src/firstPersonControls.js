@@ -24,6 +24,7 @@ export class FirstPersonControls {
     this.spawn = sceneConfig.spawn || { position: [0, this.eyeHeight, 0], yaw: 0 };
 
     this.keys = Object.create(null);
+    this.collisionSystem = null;
     this._velocity = new THREE.Vector3();
     this._forward = new THREE.Vector3();
     this._right = new THREE.Vector3();
@@ -37,6 +38,10 @@ export class FirstPersonControls {
   }
 
   get object() { return this.controls.object; }
+
+  setCollisionSystem(collisionSystem) {
+    this.collisionSystem = collisionSystem;
+  }
 
   lock() { this.controls.lock(); }
 
@@ -92,15 +97,21 @@ export class FirstPersonControls {
     this._velocity.x += (wish.x - this._velocity.x) * t;
     this._velocity.z += (wish.z - this._velocity.z) * t;
     this._velocity.y += (wishY - this._velocity.y) * t;
-    this.camera.position.addScaledVector(this._velocity, dt);
+    const currentPosition = this.camera.position.clone();
+    const proposedPosition = currentPosition.clone().addScaledVector(this._velocity, dt);
 
     if (!this.flyVertical) {
-      this.camera.position.y = this.eyeHeight;
+      proposedPosition.y = this.eyeHeight;
     } else {
-      this.camera.position.y = THREE.MathUtils.clamp(this.camera.position.y, this.min.y, this.max.y);
+      proposedPosition.y = THREE.MathUtils.clamp(proposedPosition.y, this.min.y, this.max.y);
     }
-    this.camera.position.x = THREE.MathUtils.clamp(this.camera.position.x, this.min.x, this.max.x);
-    this.camera.position.z = THREE.MathUtils.clamp(this.camera.position.z, this.min.z, this.max.z);
+    proposedPosition.x = THREE.MathUtils.clamp(proposedPosition.x, this.min.x, this.max.x);
+    proposedPosition.z = THREE.MathUtils.clamp(proposedPosition.z, this.min.z, this.max.z);
+
+    const resolvedPosition = this.collisionSystem
+      ? this.collisionSystem.resolvePosition(currentPosition, proposedPosition)
+      : proposedPosition;
+    this.camera.position.copy(resolvedPosition);
 
     if (this.limitLookUp) {
       const maxUp = Math.PI * 0.28;

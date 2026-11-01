@@ -19,6 +19,10 @@ export class POIManager {
     this.config = config;
   }
 
+  setMenuVisible(visible) {
+    this.hudContainer.hidden = !visible;
+  }
+
   async loadPOILabels(activeScene) {
     try {
       const paths = [

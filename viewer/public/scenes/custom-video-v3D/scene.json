@@ -46,5 +46,4795 @@
   "assets": {
     "mesh": null,
     "splat": "splat/scene_superclean.ply"
+  },
+  "collision": {
+    "obstacles": [
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 1",
+        "position": [
+          3.3601,
+          -2.5421,
+          1.8507
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 2",
+        "position": [
+          3.3601,
+          -2.5421,
+          1.9257
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.038
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 3",
+        "position": [
+          3.3601,
+          -2.4021,
+          1.5617
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 4",
+        "position": [
+          3.3601,
+          -2.4021,
+          1.7017
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 5",
+        "position": [
+          3.3601,
+          -2.4021,
+          1.8507
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 6",
+        "position": [
+          3.3601,
+          -2.2521,
+          1.5617
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 7",
+        "position": [
+          3.3601,
+          -2.2521,
+          1.7017
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 8",
+        "position": [
+          3.3601,
+          -2.2521,
+          1.8507
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 9",
+        "position": [
+          3.3601,
+          -2.1021,
+          1.7017
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 10",
+        "position": [
+          3.3601,
+          -2.1021,
+          1.8507
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 11",
+        "position": [
+          3.3601,
+          -1.9521,
+          1.5617
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 12",
+        "position": [
+          3.3601,
+          -1.9521,
+          1.7017
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 13",
+        "position": [
+          3.3601,
+          -1.8082,
+          1.5617
+        ],
+        "size": [
+          0.17,
+          0.1779,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 14",
+        "position": [
+          3.5001,
+          -2.5421,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 15",
+        "position": [
+          3.5001,
+          -2.5421,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 16",
+        "position": [
+          3.5001,
+          -2.5421,
+          1.9257
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.038
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 17",
+        "position": [
+          3.5001,
+          -2.4021,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 18",
+        "position": [
+          3.5001,
+          -2.2521,
+          1.5617
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 19",
+        "position": [
+          3.5001,
+          -2.2521,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 20",
+        "position": [
+          3.5001,
+          -2.2521,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 21",
+        "position": [
+          3.5001,
+          -2.1021,
+          1.5617
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 22",
+        "position": [
+          3.5001,
+          -2.1021,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 23",
+        "position": [
+          3.5001,
+          -2.1021,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 24",
+        "position": [
+          3.5001,
+          -1.9521,
+          1.5617
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 25",
+        "position": [
+          3.5001,
+          -1.9521,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 26",
+        "position": [
+          3.5001,
+          -1.9521,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 27",
+        "position": [
+          3.5001,
+          -1.8082,
+          1.5617
+        ],
+        "size": [
+          0.19,
+          0.1779,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 28",
+        "position": [
+          3.5001,
+          -1.8082,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.1779,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 29",
+        "position": [
+          3.6501,
+          -2.5421,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 30",
+        "position": [
+          3.6501,
+          -2.2521,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 31",
+        "position": [
+          3.6501,
+          -2.1021,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 32",
+        "position": [
+          3.6501,
+          -1.9521,
+          1.5617
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 33",
+        "position": [
+          3.6501,
+          -1.9521,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 34",
+        "position": [
+          3.6501,
+          -1.9521,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 35",
+        "position": [
+          3.6501,
+          -1.9521,
+          1.9257
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.038
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 36",
+        "position": [
+          3.6501,
+          -1.8082,
+          1.5617
+        ],
+        "size": [
+          0.19,
+          0.1779,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 37",
+        "position": [
+          3.6501,
+          -1.8082,
+          1.7017
+        ],
+        "size": [
+          0.19,
+          0.1779,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 38",
+        "position": [
+          3.6501,
+          -1.8082,
+          1.8507
+        ],
+        "size": [
+          0.19,
+          0.1779,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 39",
+        "position": [
+          3.7961,
+          -1.9521,
+          1.8507
+        ],
+        "size": [
+          0.182,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 40",
+        "position": [
+          3.7961,
+          -1.9521,
+          1.9257
+        ],
+        "size": [
+          0.182,
+          0.19,
+          0.038
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 41",
+        "position": [
+          3.7961,
+          -1.8082,
+          1.5617
+        ],
+        "size": [
+          0.182,
+          0.1779,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 42",
+        "position": [
+          3.7961,
+          -1.8082,
+          1.7017
+        ],
+        "size": [
+          0.182,
+          0.1779,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 43",
+        "position": [
+          3.7961,
+          -1.8082,
+          1.8507
+        ],
+        "size": [
+          0.182,
+          0.1779,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 44",
+        "position": [
+          3.8711,
+          -1.8082,
+          1.5617
+        ],
+        "size": [
+          0.032,
+          0.1779,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 45",
+        "position": [
+          3.8711,
+          -1.8082,
+          1.7017
+        ],
+        "size": [
+          0.032,
+          0.1779,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 1 (Left Wardrobe) voxel 46",
+        "position": [
+          3.8711,
+          -1.8082,
+          1.8507
+        ],
+        "size": [
+          0.032,
+          0.1779,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 1",
+        "position": [
+          0.6025,
+          -1.0997,
+          4.2912
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 2",
+        "position": [
+          0.6025,
+          -1.0997,
+          4.4312
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 3",
+        "position": [
+          0.6025,
+          -0.9497,
+          4.2912
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 4",
+        "position": [
+          0.6025,
+          -0.9497,
+          4.4312
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 5",
+        "position": [
+          0.6025,
+          -0.6497,
+          4.2912
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 6",
+        "position": [
+          0.6025,
+          -0.4997,
+          4.2912
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 7",
+        "position": [
+          0.6025,
+          -0.3497,
+          4.2912
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 8",
+        "position": [
+          0.6025,
+          -0.1997,
+          4.2912
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 9",
+        "position": [
+          0.6025,
+          -0.0687,
+          4.2912
+        ],
+        "size": [
+          0.17,
+          0.152,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 10",
+        "position": [
+          0.7425,
+          -1.0997,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 11",
+        "position": [
+          0.7425,
+          -1.0997,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 12",
+        "position": [
+          0.7425,
+          -1.0997,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 13",
+        "position": [
+          0.7425,
+          -0.9497,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 14",
+        "position": [
+          0.7425,
+          -0.9497,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 15",
+        "position": [
+          0.7425,
+          -0.9497,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 16",
+        "position": [
+          0.7425,
+          -0.7997,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 17",
+        "position": [
+          0.7425,
+          -0.6497,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 18",
+        "position": [
+          0.7425,
+          -0.3497,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 19",
+        "position": [
+          0.7425,
+          -0.1997,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 20",
+        "position": [
+          0.7425,
+          -0.1997,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 21",
+        "position": [
+          0.7425,
+          -0.0687,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.152,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 22",
+        "position": [
+          0.7425,
+          -0.0687,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.152,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 23",
+        "position": [
+          0.7425,
+          -0.0687,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.152,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 24",
+        "position": [
+          0.8925,
+          -1.2397,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 25",
+        "position": [
+          0.8925,
+          -1.2397,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 26",
+        "position": [
+          0.8925,
+          -1.0997,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 27",
+        "position": [
+          0.8925,
+          -1.0997,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 28",
+        "position": [
+          0.8925,
+          -0.9497,
+          4.2912
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 29",
+        "position": [
+          0.8925,
+          -0.9497,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 30",
+        "position": [
+          0.8925,
+          -0.9497,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 31",
+        "position": [
+          0.8925,
+          -0.7997,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 32",
+        "position": [
+          0.8925,
+          -0.7997,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 33",
+        "position": [
+          0.8925,
+          -0.6497,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 34",
+        "position": [
+          0.8925,
+          -0.6497,
+          4.6552
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.038
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 35",
+        "position": [
+          0.8925,
+          -0.4997,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 36",
+        "position": [
+          0.8925,
+          -0.4997,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 37",
+        "position": [
+          0.8925,
+          -0.3497,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 38",
+        "position": [
+          0.8925,
+          -0.3497,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 39",
+        "position": [
+          0.8925,
+          -0.1997,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 40",
+        "position": [
+          0.8925,
+          -0.1997,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 41",
+        "position": [
+          0.8925,
+          -0.1997,
+          4.6552
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.038
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 42",
+        "position": [
+          0.8925,
+          -0.0687,
+          4.4312
+        ],
+        "size": [
+          0.19,
+          0.152,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 43",
+        "position": [
+          0.8925,
+          -0.0687,
+          4.5802
+        ],
+        "size": [
+          0.19,
+          0.152,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 44",
+        "position": [
+          1.0287,
+          -1.2397,
+          4.5802
+        ],
+        "size": [
+          0.1623,
+          0.17,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 45",
+        "position": [
+          1.0287,
+          -1.0997,
+          4.4312
+        ],
+        "size": [
+          0.1623,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 46",
+        "position": [
+          1.0287,
+          -1.0997,
+          4.5802
+        ],
+        "size": [
+          0.1623,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 47",
+        "position": [
+          1.0287,
+          -0.1997,
+          4.4312
+        ],
+        "size": [
+          0.1623,
+          0.19,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 48",
+        "position": [
+          1.0287,
+          -0.1997,
+          4.5802
+        ],
+        "size": [
+          0.1623,
+          0.19,
+          0.188
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Almirah 2 (Right Wardrobe) voxel 49",
+        "position": [
+          1.0287,
+          -0.0687,
+          4.4312
+        ],
+        "size": [
+          0.1623,
+          0.152,
+          0.19
+        ],
+        "category": "almirah / wardrobe"
+      },
+      {
+        "label": "Suitcase (Grey Suitcase on Bed) voxel 1",
+        "position": [
+          3.5024,
+          -1.9415,
+          1.244
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase (Grey Suitcase on Bed) voxel 2",
+        "position": [
+          3.5024,
+          -1.9415,
+          1.3284
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.0788
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase (Grey Suitcase on Bed) voxel 3",
+        "position": [
+          3.5024,
+          -1.8474,
+          1.244
+        ],
+        "size": [
+          0.17,
+          0.0983,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase (Grey Suitcase on Bed) voxel 4",
+        "position": [
+          3.5024,
+          -1.8474,
+          1.3284
+        ],
+        "size": [
+          0.17,
+          0.0983,
+          0.0788
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 1",
+        "position": [
+          -0.2711,
+          -2.1015,
+          -1.2608
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 2",
+        "position": [
+          -0.2711,
+          -2.1015,
+          -1.18
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.0716
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 3",
+        "position": [
+          -0.2711,
+          -1.9742,
+          -1.2608
+        ],
+        "size": [
+          0.17,
+          0.1647,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 4",
+        "position": [
+          -0.2711,
+          -1.9742,
+          -1.18
+        ],
+        "size": [
+          0.17,
+          0.1647,
+          0.0716
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 5",
+        "position": [
+          -0.1399,
+          -2.1015,
+          -1.2608
+        ],
+        "size": [
+          0.1724,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 6",
+        "position": [
+          -0.1399,
+          -1.9742,
+          -1.2608
+        ],
+        "size": [
+          0.1724,
+          0.1647,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 7",
+        "position": [
+          -0.1399,
+          -1.9742,
+          -1.18
+        ],
+        "size": [
+          0.1724,
+          0.1647,
+          0.0716
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 1 (Teal Floor Trolley) voxel 8",
+        "position": [
+          -0.0649,
+          -1.9742,
+          -1.2608
+        ],
+        "size": [
+          0.0224,
+          0.1647,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 1",
+        "position": [
+          0.5552,
+          0.5589,
+          4.2962
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 2",
+        "position": [
+          0.5552,
+          0.5589,
+          4.4362
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 3",
+        "position": [
+          0.5552,
+          0.6649,
+          4.4362
+        ],
+        "size": [
+          0.17,
+          0.122,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 4",
+        "position": [
+          0.6952,
+          0.5589,
+          4.2962
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 5",
+        "position": [
+          0.6952,
+          0.5589,
+          4.4362
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 6",
+        "position": [
+          0.6952,
+          0.6649,
+          4.2962
+        ],
+        "size": [
+          0.19,
+          0.122,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 7",
+        "position": [
+          0.6952,
+          0.6649,
+          4.4362
+        ],
+        "size": [
+          0.19,
+          0.122,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 8",
+        "position": [
+          0.8082,
+          0.5589,
+          4.2962
+        ],
+        "size": [
+          0.116,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 9",
+        "position": [
+          0.8082,
+          0.5589,
+          4.4362
+        ],
+        "size": [
+          0.116,
+          0.17,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 10",
+        "position": [
+          0.8082,
+          0.6649,
+          4.2962
+        ],
+        "size": [
+          0.116,
+          0.122,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 2 (Top of Almirah 2) voxel 11",
+        "position": [
+          0.8082,
+          0.6649,
+          4.4362
+        ],
+        "size": [
+          0.116,
+          0.122,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 1",
+        "position": [
+          3.1541,
+          0.7657,
+          2.5261
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 2",
+        "position": [
+          3.1541,
+          0.7657,
+          2.6661
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 3",
+        "position": [
+          3.1541,
+          0.7657,
+          2.8161
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 4",
+        "position": [
+          3.1541,
+          0.7657,
+          2.9261
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.11
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 5",
+        "position": [
+          3.1541,
+          0.8717,
+          2.5261
+        ],
+        "size": [
+          0.17,
+          0.122,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 6",
+        "position": [
+          3.1541,
+          0.8717,
+          2.6661
+        ],
+        "size": [
+          0.17,
+          0.122,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 7",
+        "position": [
+          3.1541,
+          0.8717,
+          2.8161
+        ],
+        "size": [
+          0.17,
+          0.122,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 8",
+        "position": [
+          3.2941,
+          0.7657,
+          2.5261
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 9",
+        "position": [
+          3.2941,
+          0.7657,
+          2.6661
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 10",
+        "position": [
+          3.2941,
+          0.7657,
+          2.8161
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 11",
+        "position": [
+          3.2941,
+          0.7657,
+          2.9261
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.11
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 12",
+        "position": [
+          3.2941,
+          0.8717,
+          2.5261
+        ],
+        "size": [
+          0.19,
+          0.122,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 13",
+        "position": [
+          3.2941,
+          0.8717,
+          2.6661
+        ],
+        "size": [
+          0.19,
+          0.122,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 14",
+        "position": [
+          3.2941,
+          0.8717,
+          2.8161
+        ],
+        "size": [
+          0.19,
+          0.122,
+          0.19
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 15",
+        "position": [
+          3.2941,
+          0.8717,
+          2.9261
+        ],
+        "size": [
+          0.19,
+          0.122,
+          0.11
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 16",
+        "position": [
+          3.4251,
+          0.7657,
+          2.5261
+        ],
+        "size": [
+          0.152,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Suitcase 3 (Top of Almirah 1) voxel 17",
+        "position": [
+          3.4251,
+          0.8717,
+          2.5261
+        ],
+        "size": [
+          0.152,
+          0.122,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 1",
+        "position": [
+          -2.1172,
+          -1.3986,
+          -0.2158
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 2",
+        "position": [
+          -2.1172,
+          -1.3986,
+          -0.0668
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 3",
+        "position": [
+          -2.1172,
+          -1.2586,
+          -0.3558
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 4",
+        "position": [
+          -2.1172,
+          -1.2586,
+          -0.2158
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 5",
+        "position": [
+          -2.1172,
+          -1.2586,
+          -0.0668
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 6",
+        "position": [
+          -2.1172,
+          -1.1086,
+          -0.3558
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 7",
+        "position": [
+          -2.1172,
+          -1.1086,
+          -0.2158
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 8",
+        "position": [
+          -2.1172,
+          -1.1086,
+          -0.0668
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 9",
+        "position": [
+          -2.1172,
+          -0.9986,
+          -0.3558
+        ],
+        "size": [
+          0.17,
+          0.11,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 10",
+        "position": [
+          -2.1172,
+          -0.9986,
+          -0.2158
+        ],
+        "size": [
+          0.17,
+          0.11,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 11",
+        "position": [
+          -2.1172,
+          -0.9986,
+          -0.0668
+        ],
+        "size": [
+          0.17,
+          0.11,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 12",
+        "position": [
+          -1.9772,
+          -1.3986,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 13",
+        "position": [
+          -1.9772,
+          -1.3986,
+          -0.0668
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 14",
+        "position": [
+          -1.9772,
+          -1.3986,
+          0.0082
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.038
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 15",
+        "position": [
+          -1.9772,
+          -1.2586,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 16",
+        "position": [
+          -1.9772,
+          -1.2586,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 17",
+        "position": [
+          -1.9772,
+          -1.2586,
+          -0.0668
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 18",
+        "position": [
+          -1.9772,
+          -1.1086,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 19",
+        "position": [
+          -1.9772,
+          -1.1086,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 20",
+        "position": [
+          -1.9772,
+          -1.1086,
+          -0.0668
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 21",
+        "position": [
+          -1.9772,
+          -0.9986,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 22",
+        "position": [
+          -1.9772,
+          -0.9986,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 23",
+        "position": [
+          -1.9772,
+          -0.9986,
+          -0.0668
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 24",
+        "position": [
+          -1.9772,
+          -0.9986,
+          0.0082
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.038
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 25",
+        "position": [
+          -1.8272,
+          -1.3986,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 26",
+        "position": [
+          -1.8272,
+          -1.3986,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 27",
+        "position": [
+          -1.8272,
+          -1.2586,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 28",
+        "position": [
+          -1.8272,
+          -1.2586,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 29",
+        "position": [
+          -1.8272,
+          -1.1086,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 30",
+        "position": [
+          -1.8272,
+          -1.1086,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 31",
+        "position": [
+          -1.8272,
+          -1.1086,
+          -0.0668
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 32",
+        "position": [
+          -1.8272,
+          -0.9986,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 33",
+        "position": [
+          -1.8272,
+          -0.9986,
+          -0.0668
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 34",
+        "position": [
+          -1.6772,
+          -1.3986,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 35",
+        "position": [
+          -1.6772,
+          -1.2586,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 36",
+        "position": [
+          -1.6772,
+          -1.1086,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 37",
+        "position": [
+          -1.6772,
+          -0.9986,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 38",
+        "position": [
+          -1.6772,
+          -0.9986,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 39",
+        "position": [
+          -1.6772,
+          -0.9986,
+          -0.0668
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.188
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 40",
+        "position": [
+          -1.5272,
+          -1.1086,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 41",
+        "position": [
+          -1.5272,
+          -0.9986,
+          -0.3558
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 42",
+        "position": [
+          -1.5272,
+          -0.9986,
+          -0.2158
+        ],
+        "size": [
+          0.19,
+          0.11,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 43",
+        "position": [
+          -1.4412,
+          -0.9986,
+          -0.3558
+        ],
+        "size": [
+          0.062,
+          0.11,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Study Desk (Workstation) voxel 44",
+        "position": [
+          -1.4412,
+          -0.9986,
+          -0.2158
+        ],
+        "size": [
+          0.062,
+          0.11,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 1",
+        "position": [
+          -1.7018,
+          -2.0739,
+          -1.8729
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 2",
+        "position": [
+          -1.7018,
+          -1.9339,
+          -2.0039
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 3",
+        "position": [
+          -1.7018,
+          -1.7839,
+          -1.8729
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 4",
+        "position": [
+          -1.7018,
+          -1.6339,
+          -2.1439
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 5",
+        "position": [
+          -1.7018,
+          -1.6339,
+          -1.8729
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 6",
+        "position": [
+          -1.7018,
+          -1.5449,
+          -2.1439
+        ],
+        "size": [
+          0.17,
+          0.068,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 7",
+        "position": [
+          -1.5618,
+          -2.0739,
+          -2.1439
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 8",
+        "position": [
+          -1.5618,
+          -2.0739,
+          -2.0039
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 9",
+        "position": [
+          -1.5618,
+          -2.0739,
+          -1.8729
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 10",
+        "position": [
+          -1.5618,
+          -1.9339,
+          -2.0039
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 11",
+        "position": [
+          -1.5618,
+          -1.9339,
+          -1.8729
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 12",
+        "position": [
+          -1.5618,
+          -1.7839,
+          -2.0039
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 13",
+        "position": [
+          -1.5618,
+          -1.7839,
+          -1.8729
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 14",
+        "position": [
+          -1.5618,
+          -1.6339,
+          -2.1439
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 15",
+        "position": [
+          -1.5618,
+          -1.6339,
+          -1.8729
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 16",
+        "position": [
+          -1.4308,
+          -2.0739,
+          -2.1439
+        ],
+        "size": [
+          0.152,
+          0.17,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 17",
+        "position": [
+          -1.4308,
+          -2.0739,
+          -2.0039
+        ],
+        "size": [
+          0.152,
+          0.17,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 18",
+        "position": [
+          -1.4308,
+          -2.0739,
+          -1.8729
+        ],
+        "size": [
+          0.152,
+          0.17,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 19",
+        "position": [
+          -1.4308,
+          -1.7839,
+          -1.8729
+        ],
+        "size": [
+          0.152,
+          0.19,
+          0.152
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 20",
+        "position": [
+          -1.4308,
+          -1.6339,
+          -2.1439
+        ],
+        "size": [
+          0.152,
+          0.19,
+          0.17
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Office Chair voxel 21",
+        "position": [
+          -1.4308,
+          -1.6339,
+          -2.0039
+        ],
+        "size": [
+          0.152,
+          0.19,
+          0.19
+        ],
+        "category": "furniture"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,0]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,1]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,2]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,3]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,4]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,5]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,6]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [0,7]",
+        "position": [
+          -2.1259,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,0]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,1]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,2]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,3]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,4]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,5]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,6]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [1,7]",
+        "position": [
+          -1.9824,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,0]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,1]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,2]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,3]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,4]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,5]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,6]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [2,7]",
+        "position": [
+          -1.8389,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,0]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,1]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,2]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,3]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,4]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,5]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,6]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [3,7]",
+        "position": [
+          -1.6954,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,0]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,1]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,2]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,3]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,4]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,5]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,6]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [4,7]",
+        "position": [
+          -1.5519,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,0]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,1]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,2]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,3]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,4]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,5]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,6]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [5,7]",
+        "position": [
+          -1.4084,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,0]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,1]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,2]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,3]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,4]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,5]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,6]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [6,7]",
+        "position": [
+          -1.2649,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,0]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          0.2706
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,1]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          0.4551
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,2]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          0.6396
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,3]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          0.8241
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,4]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          1.0086
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,5]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          1.1931
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,6]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          1.3776
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 1 (Maroon Mattress) slab [7,7]",
+        "position": [
+          -1.1214,
+          -2.4245,
+          1.5621
+        ],
+        "size": [
+          0.1435,
+          0.2907,
+          0.1845
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,0]",
+        "position": [
+          0.9093,
+          -2.455,
+          -0.2733
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,1]",
+        "position": [
+          0.9093,
+          -2.455,
+          -0.1113
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,2]",
+        "position": [
+          0.9093,
+          -2.455,
+          0.0507
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,3]",
+        "position": [
+          0.9093,
+          -2.455,
+          0.2127
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,4]",
+        "position": [
+          0.9093,
+          -2.455,
+          0.3747
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,5]",
+        "position": [
+          0.9093,
+          -2.455,
+          0.5367
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,6]",
+        "position": [
+          0.9093,
+          -2.455,
+          0.6987
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [0,7]",
+        "position": [
+          0.9093,
+          -2.455,
+          0.8607
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,0]",
+        "position": [
+          1.0533,
+          -2.455,
+          -0.2733
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,1]",
+        "position": [
+          1.0533,
+          -2.455,
+          -0.1113
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,2]",
+        "position": [
+          1.0533,
+          -2.455,
+          0.0507
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,3]",
+        "position": [
+          1.0533,
+          -2.455,
+          0.2127
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,4]",
+        "position": [
+          1.0533,
+          -2.455,
+          0.3747
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,5]",
+        "position": [
+          1.0533,
+          -2.455,
+          0.5367
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,6]",
+        "position": [
+          1.0533,
+          -2.455,
+          0.6987
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [1,7]",
+        "position": [
+          1.0533,
+          -2.455,
+          0.8607
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,0]",
+        "position": [
+          1.1973,
+          -2.455,
+          -0.2733
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,1]",
+        "position": [
+          1.1973,
+          -2.455,
+          -0.1113
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,2]",
+        "position": [
+          1.1973,
+          -2.455,
+          0.0507
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,3]",
+        "position": [
+          1.1973,
+          -2.455,
+          0.2127
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,4]",
+        "position": [
+          1.1973,
+          -2.455,
+          0.3747
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,5]",
+        "position": [
+          1.1973,
+          -2.455,
+          0.5367
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,6]",
+        "position": [
+          1.1973,
+          -2.455,
+          0.6987
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [2,7]",
+        "position": [
+          1.1973,
+          -2.455,
+          0.8607
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,0]",
+        "position": [
+          1.3413,
+          -2.455,
+          -0.2733
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,1]",
+        "position": [
+          1.3413,
+          -2.455,
+          -0.1113
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,2]",
+        "position": [
+          1.3413,
+          -2.455,
+          0.0507
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,3]",
+        "position": [
+          1.3413,
+          -2.455,
+          0.2127
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,4]",
+        "position": [
+          1.3413,
+          -2.455,
+          0.3747
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,5]",
+        "position": [
+          1.3413,
+          -2.455,
+          0.5367
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,6]",
+        "position": [
+          1.3413,
+          -2.455,
+          0.6987
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [3,7]",
+        "position": [
+          1.3413,
+          -2.455,
+          0.8607
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,0]",
+        "position": [
+          1.4853,
+          -2.455,
+          -0.2733
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,1]",
+        "position": [
+          1.4853,
+          -2.455,
+          -0.1113
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,2]",
+        "position": [
+          1.4853,
+          -2.455,
+          0.0507
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,3]",
+        "position": [
+          1.4853,
+          -2.455,
+          0.2127
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,4]",
+        "position": [
+          1.4853,
+          -2.455,
+          0.3747
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,5]",
+        "position": [
+          1.4853,
+          -2.455,
+          0.5367
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,6]",
+        "position": [
+          1.4853,
+          -2.455,
+          0.6987
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [4,7]",
+        "position": [
+          1.4853,
+          -2.455,
+          0.8607
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,0]",
+        "position": [
+          1.6293,
+          -2.455,
+          -0.2733
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,1]",
+        "position": [
+          1.6293,
+          -2.455,
+          -0.1113
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,2]",
+        "position": [
+          1.6293,
+          -2.455,
+          0.0507
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,3]",
+        "position": [
+          1.6293,
+          -2.455,
+          0.2127
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,4]",
+        "position": [
+          1.6293,
+          -2.455,
+          0.3747
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,5]",
+        "position": [
+          1.6293,
+          -2.455,
+          0.5367
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,6]",
+        "position": [
+          1.6293,
+          -2.455,
+          0.6987
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [5,7]",
+        "position": [
+          1.6293,
+          -2.455,
+          0.8607
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,0]",
+        "position": [
+          1.7733,
+          -2.455,
+          -0.2733
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,1]",
+        "position": [
+          1.7733,
+          -2.455,
+          -0.1113
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,2]",
+        "position": [
+          1.7733,
+          -2.455,
+          0.0507
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,3]",
+        "position": [
+          1.7733,
+          -2.455,
+          0.2127
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,4]",
+        "position": [
+          1.7733,
+          -2.455,
+          0.3747
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,5]",
+        "position": [
+          1.7733,
+          -2.455,
+          0.5367
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,6]",
+        "position": [
+          1.7733,
+          -2.455,
+          0.6987
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Bed 2 (Floral Blanket) slab [6,7]",
+        "position": [
+          1.7733,
+          -2.455,
+          0.8607
+        ],
+        "size": [
+          0.144,
+          0.2639,
+          0.162
+        ],
+        "category": "bedding"
+      },
+      {
+        "label": "Backpack 1 voxel 1",
+        "position": [
+          -1.8036,
+          -2.0014,
+          -1.5944
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.086
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 2",
+        "position": [
+          -1.8036,
+          -1.8614,
+          -1.6824
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 3",
+        "position": [
+          -1.8036,
+          -1.8614,
+          -1.5944
+        ],
+        "size": [
+          0.17,
+          0.19,
+          0.086
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 4",
+        "position": [
+          -1.8036,
+          -1.7484,
+          -1.6824
+        ],
+        "size": [
+          0.17,
+          0.116,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 5",
+        "position": [
+          -1.6636,
+          -2.0014,
+          -1.6824
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 6",
+        "position": [
+          -1.6636,
+          -2.0014,
+          -1.5944
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.086
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 7",
+        "position": [
+          -1.6636,
+          -1.8614,
+          -1.6824
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 8",
+        "position": [
+          -1.6636,
+          -1.8614,
+          -1.5944
+        ],
+        "size": [
+          0.19,
+          0.19,
+          0.086
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 9",
+        "position": [
+          -1.6636,
+          -1.7484,
+          -1.6824
+        ],
+        "size": [
+          0.19,
+          0.116,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 10",
+        "position": [
+          -1.6636,
+          -1.7484,
+          -1.5944
+        ],
+        "size": [
+          0.19,
+          0.116,
+          0.086
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 11",
+        "position": [
+          -1.5866,
+          -2.0014,
+          -1.6824
+        ],
+        "size": [
+          0.044,
+          0.17,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 12",
+        "position": [
+          -1.5866,
+          -2.0014,
+          -1.5944
+        ],
+        "size": [
+          0.044,
+          0.17,
+          0.086
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 13",
+        "position": [
+          -1.5866,
+          -1.8614,
+          -1.5944
+        ],
+        "size": [
+          0.044,
+          0.19,
+          0.086
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Backpack 1 voxel 14",
+        "position": [
+          -1.5866,
+          -1.7484,
+          -1.6824
+        ],
+        "size": [
+          0.044,
+          0.116,
+          0.17
+        ],
+        "category": "luggage / suitcases"
+      },
+      {
+        "label": "Air Conditioner (AC) voxel 1",
+        "position": [
+          1.8558,
+          1.7188,
+          3.4067
+        ],
+        "size": [
+          0.17,
+          0.17,
+          0.17
+        ],
+        "category": "electronics"
+      },
+      {
+        "label": "Air Conditioner (AC) voxel 2",
+        "position": [
+          1.9958,
+          1.7188,
+          3.4067
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "electronics"
+      },
+      {
+        "label": "Air Conditioner (AC) voxel 3",
+        "position": [
+          1.9958,
+          1.814,
+          3.4067
+        ],
+        "size": [
+          0.19,
+          0.1004,
+          0.17
+        ],
+        "category": "electronics"
+      },
+      {
+        "label": "Air Conditioner (AC) voxel 4",
+        "position": [
+          2.1458,
+          1.7188,
+          3.4067
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "electronics"
+      },
+      {
+        "label": "Air Conditioner (AC) voxel 5",
+        "position": [
+          2.1458,
+          1.814,
+          3.4067
+        ],
+        "size": [
+          0.19,
+          0.1004,
+          0.17
+        ],
+        "category": "electronics"
+      },
+      {
+        "label": "Air Conditioner (AC) voxel 6",
+        "position": [
+          2.2958,
+          1.7188,
+          3.4067
+        ],
+        "size": [
+          0.19,
+          0.17,
+          0.17
+        ],
+        "category": "electronics"
+      },
+      {
+        "label": "Air Conditioner (AC) voxel 7",
+        "position": [
+          2.4028,
+          1.814,
+          3.4067
+        ],
+        "size": [
+          0.104,
+          0.1004,
+          0.17
+        ],
+        "category": "electronics"
+      }
+    ],
+    "obstaclePadding": 0.0,
+    "poiObstacleScale": 0.72,
+    "minObstacleSize": 0.55,
+    "ignoredCategories": [],
+    "useGeneratedObstacles": true,
+    "generatedBy": "Open3D DBSCAN occupied-voxel collision boxes v4",
+    "sourcePointCloud": "scene_superclean.ply",
+    "voxelSize": 0.15,
+    "clusterEps": 0.12,
+    "minPoints": 5,
+    "clusterBoundQuantile": 0.02,
+    "boxPadding": 0.02
   }
 }
