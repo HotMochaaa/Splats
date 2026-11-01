@@ -43,7 +43,7 @@
       }
 
       #toolbar {
-        position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 20;
+        position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 30;
         display: flex; gap: 8px; background: rgba(18, 22, 28, 0.85);
         backdrop-filter: blur(8px); padding: 6px 12px; border-radius: 12px;
         border: 1px solid #2f3844; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
@@ -66,6 +66,8 @@
       <button id="btn-walk" class="btn">🚶 Walk (WASD)</button>
       <button id="btn-angle-limit" class="btn" title="Toggle soft look-up angle limit">🔭 Angle Limit: Off</button>
       <button id="btn-bg-toggle" class="btn" title="Toggle between Room Tone, Dark, and Magenta (Key B)">🎨 BG Mode</button>
+      <button id="btn-collision-toggle" class="btn" type="button" aria-pressed="false" title="Show collision boxes">🧱 Collision Boxes: Off</button>
+      <button id="btn-poi-toggle" class="btn" type="button" aria-pressed="true" title="Hide POI menu">🏷️ POI Menu: On</button>
       <button id="btn-reset" class="btn">🎯 Center</button>
     </div>
     <div id="hud">

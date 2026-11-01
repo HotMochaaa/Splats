@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { FirstPersonControls } from './firstPersonControls.js';
 import { loadScene } from './sceneLoader.js';
 import { POIManager } from './poiManager.js';
+import { CollisionSystem } from './collisionSystem.js';
 
 const errPanel = document.createElement('div');
 errPanel.style.cssText = 'position:fixed;top:8px;right:8px;max-width:46vw;max-height:60vh;overflow:auto;'
@@ -56,6 +57,7 @@ let fpControls = null;
 let orbitControls = null;
 let poiManager = null;
 let navigationController = null;
+let collisionSystem = null;
 let activeMode = 'orbit';
 let angleLimitActive = false;
 const clock = new THREE.Clock();
@@ -65,7 +67,8 @@ async function init() {
   scene.add(root);
 
   poiManager = new POIManager(scene, camera, renderer, appEl);
-  poiManager.loadPOILabels(activeScene);
+  await poiManager.loadPOILabels(activeScene);
+  collisionSystem = new CollisionSystem(scene, config, poiManager.poiData);
 
   if (debug && debug.sampledTone) {
     bgColors[0].color = debug.sampledTone;
@@ -91,6 +94,7 @@ async function init() {
   }
 
   fpControls = new FirstPersonControls(camera, renderer.domElement, config);
+  fpControls.setCollisionSystem(collisionSystem);
   scene.add(fpControls.object);
 
   const btnV3dSuperclean = document.getElementById('btn-v3d-superclean');
@@ -98,6 +102,8 @@ async function init() {
   const btnWalk = document.getElementById('btn-walk');
   const btnAngleLimit = document.getElementById('btn-angle-limit');
   const btnBgToggle = document.getElementById('btn-bg-toggle');
+  const btnCollisionToggle = document.getElementById('btn-collision-toggle');
+  const btnPoiToggle = document.getElementById('btn-poi-toggle');
   const btnReset = document.getElementById('btn-reset');
 
   function setMode(mode) {
@@ -143,6 +149,21 @@ async function init() {
     console.log('[BG Mode]', bgColors[bgModeIndex].name);
   }
   btnBgToggle?.addEventListener('click', cycleBg);
+  btnCollisionToggle?.addEventListener('click', () => {
+    const visible = collisionSystem.toggleDebug();
+    btnCollisionToggle.textContent = `🧱 Collision Boxes: ${visible ? 'On' : 'Off'}`;
+    btnCollisionToggle.title = `${visible ? 'Hide' : 'Show'} collision boxes`;
+    btnCollisionToggle.setAttribute('aria-pressed', String(visible));
+    btnCollisionToggle.classList.toggle('active', visible);
+  });
+  btnPoiToggle?.addEventListener('click', () => {
+    const visible = btnPoiToggle.getAttribute('aria-pressed') !== 'true';
+    poiManager.setMenuVisible(visible);
+    btnPoiToggle.textContent = `🏷️ POI Menu: ${visible ? 'On' : 'Off'}`;
+    btnPoiToggle.title = `${visible ? 'Hide' : 'Show'} POI menu`;
+    btnPoiToggle.setAttribute('aria-pressed', String(visible));
+    btnPoiToggle.classList.toggle('active', visible);
+  });
 
   function resetToCenter() {
     setMode('orbit');
